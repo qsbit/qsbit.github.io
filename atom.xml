@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-04-12T08:31:01.243Z</updated>
+  <updated>2021-04-17T11:42:07.622Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>输入URL到页面加载过程</title>
+    <link href="http://example.com/2021/04/17/URL-To-Page/"/>
+    <id>http://example.com/2021/04/17/URL-To-Page/</id>
+    <published>2021-04-17T10:58:22.000Z</published>
+    <updated>2021-04-17T11:42:07.622Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="从输入-URL-到页面加载完成，发生了什么？"><a href="#从输入-URL-到页面加载完成，发生了什么？" class="headerlink" title="从输入 URL 到页面加载完成，发生了什么？"></a>从输入 URL 到页面加载完成，发生了什么？</h2><p>这是一个简单的经典的过程：</p><ul><li><p>1️⃣首先我们需要通过 DNS（域名解析系统）将 URL 解析为对应的 IP 地址，</p></li><li><p>2️⃣然后与这个 IP 地址确定的那台服务器建立起 TCP 网络连接，</p></li><li><p>3️⃣随后我们向服务端抛出我们的 HTTP 请求，服务端处理完我们的请求之后，</p></li><li><p>4️⃣把目标数据放在 HTTP 响应里返回给客户端，</p></li><li><p>5️⃣拿到响应数据的浏览器就可以开始走一个渲染的流程。渲染完毕，页面便呈现给了用户，并时刻等待响应用户的操作</p><p>（如下图所示）</p></li></ul><p><img src="/images/URL-To-Page/1.png" alt="img"></p><h3 id="我们将这个过程切分为如下的过程片段："><a href="#我们将这个过程切分为如下的过程片段：" class="headerlink" title="我们将这个过程切分为如下的过程片段："></a>我们将这个过程切分为如下的过程片段：</h3><h4 id="一、基础版"><a href="#一、基础版" class="headerlink" title="一、基础版"></a>一、基础版</h4><ol><li>浏览器根据请求的<code>URL</code>交给<code>DNS</code>域名解析，找到真实<code>IP</code>，向服务器发起请求；</li><li>服务器交给后台处理完成后返回数据，浏览器接收文件（<code>HTML、JS、CSS</code>、图象等）；</li><li>浏览器对加载到的资源（<code>HTML、JS、CSS</code>等）进行语法解析，建立相应的内部数据结构（如<code>HTML</code>的<code>DOM</code>）；</li><li>载入解析到的资源文件，渲染页面，完成。</li></ol><h3 id="二、详细版"><a href="#二、详细版" class="headerlink" title="二、详细版"></a>二、详细版</h3><ol><li><p>在浏览器地址栏<strong>输入URL</strong></p></li><li><p>浏览器查看<strong>缓存</strong>，如果请求资源在缓存中并且<strong>新鲜</strong>，跳转到转码步骤</p><ol><li><p>如果资源未缓存，发起新请求</p></li><li><p>如果已缓存，检验是否足够新鲜，足够新鲜直接提供给客户端，否则与服务器进行验证。</p></li><li><p>检验新鲜通常有两个HTTP头进行控制<code>Expires</code>和<code>Cache-Control</code>：</p><ul><li>HTTP1.0提供Expires，值为一个绝对时间表示缓存新鲜日期</li><li>HTTP1.1增加了Cache-Control: max-age=,值为以秒为单位的最大新鲜时间</li></ul></li></ol></li><li><p>浏览器<strong>解析URL</strong>获取协议，主机，端口，path</p></li><li><p>浏览器<strong>组装一个HTTP（GET）请求报文</strong></p></li><li><p>浏览器<strong>获取主机ip地址</strong>，过程如下：</p><ol><li><p>浏览器缓存</p></li><li><p>本机缓存</p></li><li><p>hosts文件</p></li><li><p>路由器缓存</p></li><li><p>ISP DNS缓存</p></li><li><p>DNS递归查询（可能存在负载均衡导致每次IP不一样）</p></li></ol></li><li><p><strong>打开一个socket与目标IP地址，端口建立TCP链接</strong>，三次握手如下：</p><ol><li>客户端发送一个TCP的<strong>SYN=1，Seq=X</strong>的包到服务器端</li><li>服务器发回<strong>SYN=1， ACK=X+1， Seq=Y</strong>的响应包</li><li>客户端发送<strong>ACK=Y+1， Seq=Z</strong></li></ol></li><li><p>TCP链接建立后<strong>发送HTTP请求</strong></p></li><li><p>服务器接受请求并解析，将请求转发到服务程序，如虚拟主机使用HTTP Host头部判断请求的服务程序</p></li><li><p>服务器检查<strong>HTTP请求头是否包含缓存验证信息</strong>如果验证缓存新鲜，返回<strong>304</strong>等对应状态码</p></li><li><p>处理程序读取完整请求并准备HTTP响应，可能需要查询数据库等操作</p></li><li><p>服务器将<strong>响应报文通过TCP连接发送回浏览器</strong></p></li><li><p>浏览器接收HTTP响应，然后根据情况选择<strong>关闭TCP连接或者保留重用，关闭TCP连接的四次握手如下</strong>：</p><ol><li><p>主动方发送<strong>Fin=1， Ack=Z， Seq= X</strong>报文</p></li><li><p>被动方发送<strong>ACK=X+1， Seq=Z</strong>报文</p></li><li><p>被动方发送<strong>Fin=1， ACK=X， Seq=Y</strong>报文</p></li><li><p>主动方发送<strong>ACK=Y， Seq=X</strong>报文</p></li></ol></li><li><p>浏览器检查响应<strong>状态码</strong>：是否为1XX，3XX， 4XX， 5XX，这些情况处理与2XX不同</p></li><li><p>如果资源可缓存，<strong>进行缓存</strong></p></li><li><p>对响应进行<strong>解码</strong>（例如gzip压缩）</p></li><li><p>根据资源类型决定如何处理（假设资源为HTML文档）</p></li><li><p><strong>解析HTML文档，构件DOM树，下载资源，构造CSSOM树，执行js脚本</strong>，这些操作没有严格的先后顺序，以下分别解释</p></li><li><p><strong>构建DOM树：</strong></p><ol><li><strong>Tokenizing</strong>：根据HTML规范将字符流解析为标记</li><li><strong>Lexing</strong>：词法分析将标记转换为对象并定义属性和规则</li><li><strong>DOM construction</strong>：根据HTML标记关系将对象组成DOM树</li></ol></li><li><p>解析过程中遇到图片、样式表、js文件，<strong>启动下载</strong></p></li><li><p><strong>构建CSSOM树：</strong></p><ol><li><strong>Tokenizing</strong>：字符流转换为标记流</li><li><strong>Node</strong>：根据标记创建节点</li><li><strong>CSSOM</strong>：节点创建CSSOM树</li></ol></li><li><p><strong>根据DOM树和CSSOM树构建渲染树 :</strong></p><ol><li>从DOM树的根节点遍历所有<strong>可见节点</strong>，不可见节点包括：1）<code>script</code>,<code>meta</code>这样本身不可见的标签。2)被css隐藏的节点，如<code>display: none</code></li><li>对每一个可见节点，找到恰当的CSSOM规则并应用</li><li>发布可视节点的内容和计算样式</li></ol></li><li><p><strong>js解析如下：</strong></p><ol><li>浏览器创建Document对象并解析HTML，将解析到的元素和文本节点添加到文档中，此时<strong>document.readystate为loading</strong></li><li>HTML解析器遇到<strong>没有async和defer的script时</strong>，将他们添加到文档中，然后执行行内或外部脚本。这些脚本会同步执行，并且在脚本下载和执行时解析器会暂停。这样就可以用document.write()把文本插入到输入流中。<strong>同步脚本经常简单定义函数和注册事件处理程序，他们可以遍历和操作script和他们之前的文档内容</strong></li><li>当解析器遇到设置了<strong>async</strong>属性的script时，开始下载脚本并继续解析文档。脚本会在它<strong>下载完成后尽快执行</strong>，但是<strong>解析器不会停下来等它下载</strong>。异步脚本**禁止使用document.write()**，它们可以访问自己script和之前的文档元素</li><li>当文档完成解析，document.readState变成interactive</li><li>所有<strong>defer</strong>脚本会<strong>按照在文档出现的顺序执行</strong>，延迟脚本<strong>能访问完整文档树</strong>，禁止使用document.write()</li><li>浏览器<strong>在Document对象上触发DOMContentLoaded事件</strong></li><li>此时文档完全解析完成，浏览器可能还在等待如图片等内容加载，等这些<strong>内容完成载入并且所有异步脚本完成载入和执行</strong>，document.readState变为complete，window触发load事件</li></ol></li><li><p><strong>显示页面</strong>（HTML解析过程中会逐步显示页面）</p></li></ol><h2 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h2><blockquote><p>在展开性能优化这个话题的时候，此时这个问题就非常的重要，因为后续的性能优化内容都必须以这个问题的答案为骨架展开</p></blockquote><p>而所谓的<strong>性能优化</strong>，其实就是针对这五个过程进行分解，逐个击破，逐个优化。</p><p>我们整个的知识图谱，用思维导图展示如下：</p><p><img src="/images/URL-To-Page/2.png" alt="img"></p><h3 id="比较简洁且常用的优化方式如下："><a href="#比较简洁且常用的优化方式如下：" class="headerlink" title="比较简洁且常用的优化方式如下："></a>比较简洁且常用的优化方式如下：</h3><ul><li><code>content</code>方面<ul><li><strong>减少<code>HTTP</code>请求：合并文件、<code>CSS</code>精灵</strong>、<code>inline Image</code></li><li><strong>减少<code>DNS</code>查询：</strong><code>DNS</code>缓存、将资源分布到恰当数量的主机名</li><li><strong>减少<code>DOM</code>元素数量</strong></li></ul></li><li><code>Server</code>方面<ul><li><strong>使用<code>CDN</code></strong></li><li>配置<code>ETag</code></li><li><strong>对组件使用<code>Gzip</code>压缩</strong></li></ul></li><li><code>Cookie</code>方面<ul><li>减小<code>cookie</code>大小</li></ul></li><li><code>css</code>方面<ul><li><strong>将样式表放到页面顶部</strong></li><li><strong>不使用<code>CSS</code>表达式</strong></li><li><strong>使用<code>&lt;link&gt;</code>不使用<code>@import</code></strong></li></ul></li><li><code>Javascript</code>方面<ul><li><strong>将脚本放到页面底部</strong></li><li><strong>将<code>javascript</code>和<code>css</code>从外部引入</strong></li><li><strong>压缩<code>javascript</code>和<code>css</code></strong></li><li>删除不需要的脚本</li><li><strong>减少<code>DOM</code>访问</strong></li></ul></li><li>图片方面<ul><li>优化图片：根据实际颜色需要选择色深、压缩</li><li><strong>优化<code>css</code>精灵</strong></li><li>不要在<code>HTML</code>中拉伸图片</li></ul></li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;从输入-URL-到页面加载完成，发生了什么？&quot;&gt;&lt;a href=&quot;#从输入-URL-到页面加载完成，发生了什么？&quot; class=&quot;headerlink&quot; title=&quot;从输入 URL 到页面加载完成，发生了什么？&quot;&gt;&lt;/a&gt;从输入 URL 到页面加载完成，发生了什</summary>
+      
+    
+    
+    
+    <category term="FE-Interview" scheme="http://example.com/categories/FE-Interview/"/>
+    
+    
+    <category term="URL" scheme="http://example.com/tags/URL/"/>
+    
+  </entry>
   
   <entry>
     <title>宏任务&amp;微任务</title>
@@ -526,33 +550,6 @@
     
     
     <category term="动态规划" scheme="http://example.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>剑指 Offer 07. 重建二叉树</title>
-    <link href="http://example.com/2021/01/29/swordOffer07/"/>
-    <id>http://example.com/2021/01/29/swordOffer07/</id>
-    <published>2021-01-28T23:44:31.000Z</published>
-    <updated>2021-03-19T04:52:12.793Z</updated>
-    
-    <content type="html"><![CDATA[<p>剑指 Offer 07. 重建二叉树</p><h2 id="题目描述："><a href="#题目描述：" class="headerlink" title="题目描述："></a>题目描述：</h2><p>输入某二叉树的前序遍历和中序遍历的结果，请重建该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。</p><h2 id="示例："><a href="#示例：" class="headerlink" title="示例："></a>示例：</h2><blockquote><p><strong>例如，给出</strong><br>前序遍历 preorder = [3,9,20,15,7]<br>中序遍历 inorder = [9,3,15,20,7]</p></blockquote><blockquote><p>返回如下的二叉树：<br><img src="https://img-blog.csdnimg.cn/20210201222103880.png" alt="在这里插入图片描述"></p></blockquote><h2 id="思路："><a href="#思路：" class="headerlink" title="思路："></a>思路：</h2><p>二叉树前序遍历第一个点为根节点，中序遍历顺序为先左子树然后根节点最后右子树。所以先通过前序遍历找出根节点，然后将中序遍历分为左右子树两组，最后对于每个子树依次递归调用。</p><h2 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> buildTree = <span class="function"><span class="keyword">function</span>(<span class="params">preorder, inorder</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(preorder.length==<span class="number">0</span> || inorder.length==<span class="number">0</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">var</span> index=inorder.indexOf(preorder[<span class="number">0</span>]);</span><br><span class="line">    <span class="keyword">var</span> left=inorder.slice(<span class="number">0</span>,index);<span class="comment">//中序左子树</span></span><br><span class="line">    <span class="keyword">var</span> right=inorder.slice(index+<span class="number">1</span>);<span class="comment">//中序右子树</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        val:preorder[<span class="number">0</span>],</span><br><span class="line">        <span class="comment">//递归左右子树的前序，中序 </span></span><br><span class="line">        left:buildTree(preorder.slice(<span class="number">1</span>,index+<span class="number">1</span>),left),</span><br><span class="line">        right:buildTree(preorder.slice(index+<span class="number">1</span>),right)</span><br><span class="line">     &#125;; </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;剑指 Offer 07. 重建二叉树&lt;/p&gt;
-&lt;h2 id=&quot;题目描述：&quot;&gt;&lt;a href=&quot;#题目描述：&quot; class=&quot;headerlink&quot; title=&quot;题目描述：&quot;&gt;&lt;/a&gt;题目描述：&lt;/h2&gt;&lt;p&gt;输入某二叉树的前序遍历和中序遍历的结果，请重建该二叉树。假设输入</summary>
-      
-    
-    
-    
-    <category term="算法" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95/"/>
-    
-    <category term="《剑指offer》" scheme="http://example.com/categories/%E7%AE%97%E6%B3%95/%E3%80%8A%E5%89%91%E6%8C%87offer%E3%80%8B/"/>
-    
-    
-    <category term="二叉树" scheme="http://example.com/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/"/>
     
   </entry>
   
