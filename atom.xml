@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-04-24T14:49:10.037Z</updated>
+  <updated>2021-04-27T07:55:56.948Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>git常用上传文件方式</title>
+    <link href="http://example.com/2021/04/27/Git-Used/"/>
+    <id>http://example.com/2021/04/27/Git-Used/</id>
+    <published>2021-04-27T07:31:47.000Z</published>
+    <updated>2021-04-27T07:55:56.948Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="多种上传方式"><a href="#多种上传方式" class="headerlink" title="多种上传方式"></a>多种上传方式</h3><h4 id="一、使用HTTPS方式上传本地的文件到Github："><a href="#一、使用HTTPS方式上传本地的文件到Github：" class="headerlink" title="一、使用HTTPS方式上传本地的文件到Github："></a>一、使用HTTPS方式上传本地的文件到Github：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 初始化本地仓库</span></span><br><span class="line">git init</span><br><span class="line"><span class="comment"># 创建文件/文档</span></span><br><span class="line">mkdir 文件名  / touch 文档名</span><br><span class="line"><span class="comment"># 克隆远程仓库</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/user/仓库名.git</span><br><span class="line"><span class="comment"># 添加文件到暂存区（.代表全部，或者all）</span></span><br><span class="line">git add . </span><br><span class="line"><span class="comment"># 提交文件到工作区  -m 合并</span></span><br><span class="line">git commit –m <span class="string">&#x27;对文件/提交的说明 &#x27;</span></span><br><span class="line"><span class="comment"># 把文件推送到远程仓库</span></span><br><span class="line">git push -u origin master</span><br><span class="line"><span class="comment"># origin -&gt; 远程仓库的名字，</span></span><br><span class="line"><span class="comment"># origin/master -&gt; 远程仓库的master分支。</span></span><br><span class="line"><span class="comment"># git push origin master  就是将本地的master分支</span></span><br><span class="line"><span class="comment"># -&gt;push到远程仓库的与之有追踪关系的分支（通常名字相同）</span></span><br><span class="line"><span class="comment"># -u 用户进程的最大数量</span></span><br></pre></td></tr></table></figure><h4 id="二、使用SSH方式上传本地的文件到Github："><a href="#二、使用SSH方式上传本地的文件到Github：" class="headerlink" title="二、使用SSH方式上传本地的文件到Github："></a>二、使用SSH方式上传本地的文件到Github：</h4><p><strong>（1）查看/配置密钥</strong></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看是否已经存在本地公钥</span></span><br><span class="line">cat ~/.ssh/id_rsa.pub</span><br><span class="line"><span class="comment"># 没有--&gt; 执行生成本地公钥</span></span><br><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;XXXXX@qq.com&quot;</span></span><br><span class="line"><span class="comment"># 这个指令会要求你提供一个 位置和文件名 去存放键值对和密码，可以一直点击 Enter键去     使用默认值。</span></span><br><span class="line"><span class="comment"># 提示1：最好的情况是一个密码对应一个ssh key，但也不是非得这样去做，就像上面我们跳过   创建密码这个步骤。</span></span><br><span class="line"><span class="comment"># 提示2：设置的密码不能被修改，也不可以被获取。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 此时你按照上述路径 C:/Users/Admin/.ssh，找到该文件夹</span></span><br><span class="line"><span class="comment"># 使用记事本打开 id_rsa.pub 文件，直接选中所有内容复制即可。</span></span><br><span class="line"><span class="comment"># 也可以根据操作系统的不同，选择不同的指令。</span></span><br><span class="line"><span class="comment"># windows clip &lt; ~/.ssh/id_rsa.pub</span></span><br><span class="line"><span class="comment"># mac pbcopy &lt; ~/.ssh/id_rsa.pub</span></span><br><span class="line"><span class="comment"># 执行命令后，此时公钥已经复制到了粘贴板上。</span></span><br></pre></td></tr></table></figure><p><strong>(2)上传到Github仓库</strong></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 初始化本地仓库</span></span><br><span class="line">git init</span><br><span class="line"><span class="comment"># 创建文件/文档</span></span><br><span class="line">mkdir 文件名  / touch 文档名</span><br><span class="line"><span class="comment"># 添加远程仓库</span></span><br><span class="line">git remote add origin git@github.com:defnngj/hello-world.git  </span><br><span class="line"><span class="comment"># 添加文件到暂存区</span></span><br><span class="line">git add 文件</span><br><span class="line"><span class="comment"># 提交文件到工作区</span></span><br><span class="line">git commit –m <span class="string">&#x27;对文件/提交的说明&#x27;</span></span><br><span class="line"><span class="comment"># 把文件推送到远程仓库</span></span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure><p><strong>(3) 如果你的HTTPS方法需要每次输入密码，那么可以转成SSH传输</strong></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改git的remote url</span></span><br><span class="line"><span class="comment"># 使用命令 git remote -v 查看你当前的 remote url</span></span><br><span class="line">git remote -v</span><br><span class="line">origin https://github.com/someaccount/someproject.git (fetch)</span><br><span class="line">origin https://github.com/someaccount/someproject.git (push)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 复制此ssh链接，然后使用命令 git remote set-url 来调整你的url。</span></span><br><span class="line">git remote set-url origin git@github.com:someaccount/someproject.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 然后你可以再用命令 git remote -v 查看一下，url是否已经变成了ssh地址。</span></span><br><span class="line"><span class="comment"># 然后你就可以愉快的使用git fetch, git pull , git push，再也不用输入烦人的密码了</span></span><br></pre></td></tr></table></figure><h3 id="git上传过程中出现的错误和方法"><a href="#git上传过程中出现的错误和方法" class="headerlink" title="git上传过程中出现的错误和方法"></a>git上传过程中出现的错误和方法</h3><h4 id="1-Github是不传输大文件的-gt-nbsp-否则报错error-failedto-push-som-refs-to-…"><a href="#1-Github是不传输大文件的-gt-nbsp-否则报错error-failedto-push-som-refs-to-…" class="headerlink" title="(1)Github是不传输大文件的==&gt;&nbsp; 否则报错error:failedto push som refs to …"></a>(1)Github是不传输大文件的==&gt;&nbsp; 否则报错<code>error:failedto push som refs to …</code></h4><blockquote><p>git push 时，存在大文件会报错，即使删除大文件后，还会报错。主要是因为大文件存在没有被提交的commit记录里面。</p></blockquote><p>(2)[Git撤销&amp;回滚操作(git reset 和 get revert)</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先把远程服务器github上面的文件拉下来</span></span><br><span class="line">git pullorigin master </span><br><span class="line">git pushorigin master</span><br><span class="line"><span class="comment"># 如果出现报错 fatal:Couldn&#x27;t find remote ref master</span></span><br><span class="line"><span class="comment"># 或者fatal: &#x27;origin&#x27; doesnot appear to be a git repository</span></span><br><span class="line"><span class="comment"># 以及fatal: Could notread from remote repository.</span></span><br><span class="line"><span class="comment"># 则需要重新输入</span></span><br><span class="line">git remote add origin git@github.com:defnngj/hello-world.git  </span><br></pre></td></tr></table></figure><h3 id="一张图解决Git操作"><a href="#一张图解决Git操作" class="headerlink" title="一张图解决Git操作"></a>一张图解决Git操作</h3><p><img src="/images/Git-Used/20210125190841921.png" alt="在这里插入图片描述"></p><p>如有错误，敬请及时指正~</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h3 id=&quot;多种上传方式&quot;&gt;&lt;a href=&quot;#多种上传方式&quot; class=&quot;headerlink&quot; title=&quot;多种上传方式&quot;&gt;&lt;/a&gt;多种上传方式&lt;/h3&gt;&lt;h4 id=&quot;一、使用HTTPS方式上传本地的文件到Github：&quot;&gt;&lt;a href=&quot;#一、使用HTTPS方式</summary>
+      
+    
+    
+    
+    <category term="Git" scheme="http://example.com/categories/Git/"/>
+    
+    
+    <category term="Git" scheme="http://example.com/tags/Git/"/>
+    
+  </entry>
   
   <entry>
     <title>把书念下去，然后走出去！</title>
@@ -37,27 +61,6 @@
     
     
     <category term="Perception" scheme="http://example.com/tags/Perception/"/>
-    
-  </entry>
-  
-  <entry>
-    <title></title>
-    <link href="http://example.com/2021/04/19/qsbit/"/>
-    <id>http://example.com/2021/04/19/qsbit/</id>
-    <published>2021-04-19T08:52:06.695Z</published>
-    <updated>2021-04-19T09:39:46.162Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="qsbit-github-io"><a href="#qsbit-github-io" class="headerlink" title="qsbit.github.io"></a>qsbit.github.io</h1><p>:rocket:</p><p>欢迎参观我的个人主页~</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;qsbit-github-io&quot;&gt;&lt;a href=&quot;#qsbit-github-io&quot; class=&quot;headerlink&quot; title=&quot;qsbit.github.io&quot;&gt;&lt;/a&gt;qsbit.github.io&lt;/h1&gt;&lt;p&gt;:rocket:&lt;/p&gt;
-&lt;p&gt;欢迎</summary>
-      
-    
-    
-    
     
   </entry>
   
