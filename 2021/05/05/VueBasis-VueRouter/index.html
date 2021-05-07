@@ -1,0 +1,351 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vue基础知识总结-VueRouter | Jungle</title><meta name="keywords" content="Vue"><meta name="author" content="Jungle"><meta name="copyright" content="Jungle"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="vue-router1、vue-router如何响应 路由参数 的变化？提醒一下，当使用路由参数时，例如从 &#x2F;user&#x2F;foo 导航到 &#x2F;user&#x2F;bar，原来的组件实例会被复用。因为两个路由都渲染同个组件，比起销毁再创建，复用则显得更加高效。不过，这也意味着组件的生命周期钩子不会再被调用。 复用组件时，想对路由参数的变化作出响应的话，你可以简单地watch (监测变化) $route 对象： 1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue基础知识总结-VueRouter">
+<meta property="og:url" content="http://example.com/2021/05/05/VueBasis-VueRouter/index.html">
+<meta property="og:site_name" content="Jungle">
+<meta property="og:description" content="vue-router1、vue-router如何响应 路由参数 的变化？提醒一下，当使用路由参数时，例如从 &#x2F;user&#x2F;foo 导航到 &#x2F;user&#x2F;bar，原来的组件实例会被复用。因为两个路由都渲染同个组件，比起销毁再创建，复用则显得更加高效。不过，这也意味着组件的生命周期钩子不会再被调用。 复用组件时，想对路由参数的变化作出响应的话，你可以简单地watch (监测变化) $route 对象： 1">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/cover/VueBasis.jpg">
+<meta property="article:published_time" content="2021-05-05T06:32:25.000Z">
+<meta property="article:modified_time" content="2021-05-07T02:18:45.809Z">
+<meta property="article:author" content="Jungle">
+<meta property="article:tag" content="Vue">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/cover/VueBasis.jpg"><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="http://example.com/2021/05/05/VueBasis-VueRouter/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-05-07 10:18:45'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Jungle" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">71</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 爱好</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> 留声机</span></a></li><li><a class="site-page" href="/books/"><i class="fa-fw fas fa-book"></i><span> 读书架</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 观影区</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/foot/"><i class="fa-fw fas fa-paw"></i><span> 足迹</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/../images/cover/VueBasis.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Jungle</a></span><span id="weather-v2-plugin-simple"></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 爱好</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> 留声机</span></a></li><li><a class="site-page" href="/books/"><i class="fa-fw fas fa-book"></i><span> 读书架</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 观影区</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/foot/"><i class="fa-fw fas fa-paw"></i><span> 足迹</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Vue基础知识总结-VueRouter<a class="post-edit-link" href="null_posts/VueBasis-VueRouter.md" title="编辑" target="_blank"><i class="fas fa-pencil-alt"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-05-05T06:32:25.000Z" title="发表于 2021-05-05 14:32:25">2021-05-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-05-07T02:18:45.809Z" title="更新于 2021-05-07 10:18:45">2021-05-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/">框架学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/Vue/">Vue</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/Vue/Vue-Router/">Vue Router</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>13分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="vue-router"><a href="#vue-router" class="headerlink" title="vue-router"></a>vue-router</h3><h4 id="1、vue-router如何响应-路由参数-的变化？"><a href="#1、vue-router如何响应-路由参数-的变化？" class="headerlink" title="1、vue-router如何响应 路由参数 的变化？"></a>1、vue-router如何响应 路由参数 的变化？</h4><p>提醒一下，当使用路由参数时，例如从 /user/foo 导航到 /user/bar，<strong>原来的组件实例会被复用</strong>。因为两个路由都渲染同个组件，比起销毁再创建，复用则显得更加高效。不过，这<strong>也意味着组件的生命周期钩子不会再被调用。</strong></p>
+<p>复用组件时，想对路由参数的变化作出响应的话，你可以简单地<strong>watch (监测变化) $route 对象</strong>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> User = &#123;</span><br><span class="line">	template: <span class="string">&#x27;...&#x27;</span>,</span><br><span class="line">	watch: &#123;</span><br><span class="line">		<span class="string">&#x27;$route&#x27;</span> (to, <span class="keyword">from</span>) &#123;</span><br><span class="line">			<span class="comment">// 对路由变化作出响应...</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>或者使用 2.2 中引入的 <code>beforeRouteUpdate</code> 导航守卫：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> User = &#123;</span><br><span class="line">	template: <span class="string">&#x27;...&#x27;</span>,</span><br><span class="line">	beforeRouteUpdate (to, <span class="keyword">from</span>, next) &#123;</span><br><span class="line">		<span class="comment">// react to route changes...</span></span><br><span class="line">		<span class="comment">// don&#x27;t forget to call next()</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">注意是：</span><br><span class="line">	（<span class="number">1</span>）从同一个组件跳转到同一个组件。</span><br><span class="line">	（<span class="number">2</span>）生命周期钩子created和mounted都不会调用。</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、完整的-vue-router-导航解析流"><a href="#2、完整的-vue-router-导航解析流" class="headerlink" title="2、完整的 vue-router 导航解析流"></a>2、完整的 vue-router 导航解析流</h4><p>1）导航被触发。</p>
+<p>2）在失活的组件里调用离开守卫。</p>
+<p>3）调用全局的 beforeEach 守卫。</p>
+<p>4）在重用的组件里调用 beforeRouteUpdate 守卫 (2.2+)。</p>
+<p>5）在路由配置里调用 beforeEnter 。</p>
+<p>6）解析异步路由组件。</p>
+<p>7）在被激活的组件里调用 beforeRouteEnter 。</p>
+<p>8）调用全局的 beforeResolve 守卫 (2.5+)。</p>
+<p>9）导航被确认。</p>
+<p>10）调用全局的 afterEach 钩子。</p>
+<p>11）触发 DOM 更新。</p>
+<p>12）用创建好的实例调用 beforeRouteEnter 守卫中传给 next 的回调函数。</p>
+<p><img src="/images/VueBasis-VueRouter/image-20210429173157369.png" alt="image-20210429173157369"></p>
+<h4 id="3、vue-router有哪几种导航钩子（-导航守卫-）？"><a href="#3、vue-router有哪几种导航钩子（-导航守卫-）？" class="headerlink" title="3、vue-router有哪几种导航钩子（ 导航守卫 ）？"></a>3、vue-router有哪几种导航钩子（ 导航守卫 ）？</h4><p>vue-router 提供的导航守卫主要用来通过跳转或取消的方式守卫导航。</p>
+<p>例如判断登录信息：没登录全部跳到登录页。判断必要操作是否进行没进行的话中断跳转。<br><strong>参数或查询的改变并不会触发进入/离开的导航守卫</strong>。你可以通过观察 <code>$route</code> 对象响应路由参数的变<br>化)来应对这些变化，或使用 <code>beforeRouteUpdate</code> 的组件内守卫。</p>
+<p><strong>分为三大类：全局守卫、路由守卫、组件守卫</strong></p>
+<h5 id="全局前置守卫"><a href="#全局前置守卫" class="headerlink" title="全局前置守卫"></a>全局前置守卫</h5><p>可以使用 router.beforeEach 注册一个全局前置守卫：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> VueRouter(&#123; ... &#125;)</span><br><span class="line">router.beforeEach(<span class="function">(<span class="params">to, <span class="keyword">from</span>, next</span>) =&gt;</span> &#123;</span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>当一个导航触发时，全局前置守卫按照创建顺序调用。守卫是异步解析执行，此时导航在所有守卫<br>resolve 完之前一直处于 等待中。<br>    &nbsp; 每个守卫方法接收三个参数：</p>
+<ul>
+<li><code>to: Route</code> : 即将要进入的目标 路由对象</li>
+<li><code>from: Route</code> : 当前导航正要离开的路由</li>
+<li><code>next: Function</code> : 一定要调用该方法来 resolve 这个钩子。执行效果依赖 next 方法的调用参数。</li>
+<li><code>next()</code> : 进行管道中的下一个钩子。如果全部钩子执行完了，则导航的状态就是 confirmed (确认的)。</li>
+<li><code>next(false</code>) : 中断当前的导航。如果浏览器的 URL 改变了 (可能是用户手动或者浏览器后退按钮)，那么 URL 地址会重置到 from 路由对应的地址。</li>
+<li><code>next(&#39;/&#39;) </code><strong>或者</strong> <code>next(&#123; path: &#39;/&#39; &#125;)</code> : 跳转到一个不同的地址。当前的导航被中断，然后进行一个新的导航。你可以向 next 传递任意位置对象，且允许设置诸如 <code>replace: true</code> 、 <code>name:&#39;home&#39; </code>之类的选项以及任何用在 <code>router-link </code>的 <code>to </code>prop或 <code>router.push</code> `中的选项。</li>
+<li><code>next(error) :</code> (2.4.0+) 如果传入 <code>next </code>的参数是一个 <code>Error</code> 实例，则导航会被终止且该错误会被传递给 <code>router.onError() </code>注册过的回调。</li>
+</ul>
+<p><strong>确保要调用 <code>next </code>方法，否则钩子就不会被 resolved。</strong></p>
+<h5 id="全局解析守卫"><a href="#全局解析守卫" class="headerlink" title="全局解析守卫"></a>全局解析守卫</h5><p>在 2.5.0+ 你可以用 <code>router.beforeResolve</code> 注册一个全局守卫。这和 router.beforeEach 类似，区<br>别是在导航被确认之前，<strong>同时在所有组件内守卫和异步路由组件被解析之后</strong>，解析守卫就被调用。</p>
+<h5 id="全局后置钩子"><a href="#全局后置钩子" class="headerlink" title="全局后置钩子"></a>全局后置钩子</h5><p>你也可以注册全局后置钩子，然而和守卫不同的是，这些钩子不会接受 <code>next </code>函数也不会改变导航本<br>身：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">router.afterEach(<span class="function">(<span class="params">to, <span class="keyword">from</span></span>) =&gt;</span> &#123;</span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h5 id="路由独享的守卫"><a href="#路由独享的守卫" class="headerlink" title="路由独享的守卫"></a>路由独享的守卫</h5><p>你可以在路由配置上直接定义 <code>beforeEnter</code> 守卫：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> VueRouter(&#123;</span><br><span class="line">	routes: [</span><br><span class="line">		&#123;</span><br><span class="line">			path: <span class="string">&#x27;/foo&#x27;</span>,</span><br><span class="line">			component: Foo,</span><br><span class="line">			beforeEnter: <span class="function">(<span class="params">to, <span class="keyword">from</span>, next</span>) =&gt;</span> &#123;</span><br><span class="line">				<span class="comment">// ...</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>这些守卫与全局前置守卫的方法参数是一样的。</p>
+<h5 id="组件内的守卫"><a href="#组件内的守卫" class="headerlink" title="组件内的守卫"></a>组件内的守卫</h5><p>最后，可以在路由组件内直接定义以下路由导航守卫：</p>
+<ul>
+<li><code>beforeRouteEnter</code></li>
+<li><code>beforeRouteUpdate</code> (2.2 新增)</li>
+<li><code>beforeRouteLeave</code></li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Foo = &#123;</span><br><span class="line">	template: <span class="string">`...`</span>,</span><br><span class="line">	beforeRouteEnter (to, <span class="keyword">from</span>, next) &#123;</span><br><span class="line">		<span class="comment">// 在渲染该组件的对应路由被 confirm 前调用</span></span><br><span class="line">		<span class="comment">// 不！能！获取组件实例 `this`</span></span><br><span class="line">		<span class="comment">// 因为当守卫执行前，组件实例还没被创建</span></span><br><span class="line">	&#125;,</span><br><span class="line">	beforeRouteUpdate (to, <span class="keyword">from</span>, next) &#123;</span><br><span class="line">		<span class="comment">// 在当前路由改变，但是该组件被复用时调用</span></span><br><span class="line">		<span class="comment">// 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候，</span></span><br><span class="line">		<span class="comment">// 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。</span></span><br><span class="line">		<span class="comment">// 可以访问组件实例 `this`</span></span><br><span class="line">&#125;,</span><br><span class="line">	beforeRouteLeave (to, <span class="keyword">from</span>, next) &#123;</span><br><span class="line">		<span class="comment">// 导航离开该组件的对应路由时调用</span></span><br><span class="line">		<span class="comment">// 可以访问组件实例 `this`</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>beforeRouteEnter </code>守卫 <strong>不能</strong> 访问 <code>this</code> ，因为守卫在导航确认前被调用,因此即将登场的新组件还没<br>被创建。<br>不过，你可以通过传一个回调给 next 来访问组件实例。在导航被确认的时候执行回调，并且把组件实<br>例作为回调方法的参数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">beforeRouteEnter (to, <span class="keyword">from</span>, next) &#123;</span><br><span class="line">	next(<span class="function"><span class="params">vm</span> =&gt;</span> &#123;</span><br><span class="line">		<span class="comment">// 通过 `vm` 访问组件实例</span></span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意 <code>beforeRouteEnter</code> 是支持给 <code>next </code>传递回调的唯一守卫。对于 <code>beforeRouteUpdate </code>和<br><code>beforeRouteLeave</code> 来说， <code>this</code> 已经可用了，所以不支持传递回调，因为没有必要了。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">beforeRouteUpdate (to, <span class="keyword">from</span>, next) &#123;</span><br><span class="line">	<span class="comment">// just use `this`</span></span><br><span class="line">	<span class="built_in">this</span>.name = to.params.name</span><br><span class="line">	next()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个离开守卫通常用来禁止用户在还未保存修改前突然离开。该导航可以通过 <code>next(false)</code> 来取消。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">beforeRouteLeave (to, <span class="keyword">from</span> , next) &#123;</span><br><span class="line">	<span class="keyword">const</span> answer = <span class="built_in">window</span>.confirm(<span class="string">&#x27;Do you really want to leave? you have unsaved</span></span><br><span class="line"><span class="string">changes!&#x27;</span>)</span><br><span class="line">	<span class="keyword">if</span> (answer) &#123;</span><br><span class="line">		next()</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		next(<span class="literal">false</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="4、vue-router传递参数的几种方式"><a href="#4、vue-router传递参数的几种方式" class="headerlink" title="4、vue-router传递参数的几种方式"></a>4、vue-router传递参数的几种方式</h4><h5 id="1）使用name传递"><a href="#1）使用name传递" class="headerlink" title="1）使用name传递"></a>1）使用name传递</h5><p>之前一直在配置路由的时候出现一个name,但不知道他具体有什么用，在路由里他可以用来传递参数。<br>在index.js中将路由的name都写好</p>
+<p><img src="/images/VueBasis-VueRouter/image-20210429213649393.png" alt="image-20210429213649393"></p>
+<p>接收参数：</p>
+<p>在我们需要接收它的页面里添加</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>我是router-name:&#123;&#123;$route.name&#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/VueBasis-VueRouter/image-20210429213719976.png" alt="image-20210429213719976"></p>
+<p>比如我在这里是在APP.vue中接收的，我希望切换每个页面都能看见参数。<br>但这种方法不太常用，因为我们觉得它不太规整。</p>
+<h5 id="2）to来传递"><a href="#2）to来传递" class="headerlink" title="2）to来传递"></a>2）to来传递</h5><p>利用router-link 中的to来传参，看语法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;router-link v-bind:to&#x3D;&quot;&#123;name:&#39;xxx&#39;,params:&#123;key:value&#125;&#125;&quot;&gt;&lt;&#x2F;router-link&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>a.首先：to需要绑定；</p>
+</li>
+<li><p>b.传参使用类似与对象的形式；</p>
+</li>
+<li><p>c.name就是我们在配置路由时候取的名字；</p>
+</li>
+<li><p>d.参数也是采用对象的形式。</p>
+</li>
+<li><p>实际操作一下：</p>
+<p>=&gt; a.在APP.vue中将to里面的路径改成上面那样</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;router-link :to&#x3D;&quot;&#123;name:&#39;hellovue&#39;,params:&#123;username:&#39;tomcat&#39;&#125;&#125;&quot;&gt;hellovue页面</span><br><span class="line">&lt;&#x2F;router-link&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这里我们注意to的写法，前面加了冒号，因为那是绑定的，传递一个username过去，值为tomcat</p>
+<p>​    =&gt; b.在index.js里面给hellovue配置名字叫hellovue,与上面name相对应</p>
+<p><img src="/images/VueBasis-VueRouter/image-20210429214048560.png" alt="image-20210429214048560"></p>
+<p>​    =&gt; c、在hellovue.vue中接收参数</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>传递的名字是：&#123;&#123;$route.params.username&#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="3）采用url传参"><a href="#3）采用url传参" class="headerlink" title="3）采用url传参"></a>3）采用url传参</h5><p>在路由文件里采用冒号的形式传参，这就是对参数的绑定</p>
+<ul>
+<li><p>a、修改index.js里的path，这里我们修改myjob.vue组件</p>
+<p><img src="/images/VueBasis-VueRouter/image-20210429214435188.png" alt="image-20210429214435188"></p>
+</li>
+<li><p>b、在App.vue组件里传递参数</p>
+<p><img src="/images/VueBasis-VueRouter/image-20210429214445901.png" alt="image-20210429214445901"></p>
+</li>
+<li><p>c、在myjob.vue组件里显示我们要展示的内容（接收参数）</p>
+</li>
+</ul>
+<p><img src="/images/VueBasis-VueRouter/image-20210429214453495.png" alt="image-20210429214453495"></p>
+<h4 id="5、vue-router的动态路由匹配"><a href="#5、vue-router的动态路由匹配" class="headerlink" title="5、vue-router的动态路由匹配"></a>5、vue-router的动态路由匹配</h4><p>我们经常需要把某种模式匹配到的所有路由，全都映射到同个组件。例如，我们有一个 User 组件，对<br>于所有 ID 各不相同的用户，都要使用这个组件来渲染。那么，我们可以在 vue-router 的路由路径中<br>使用“动态路径参数”(dynamic segment) 来达到这个效果：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> User = &#123;</span><br><span class="line">	template: <span class="string">&#x27;&lt;div&gt;User&lt;/div&gt;&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> VueRouter(&#123;</span><br><span class="line">	routes: [</span><br><span class="line">		<span class="comment">// 动态路径参数 以冒号开头</span></span><br><span class="line">		&#123; <span class="attr">path</span>: <span class="string">&#x27;/user/:id&#x27;</span>, <span class="attr">component</span>: User &#125;</span><br><span class="line">	]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>现在呢，像<code>/user/foo</code>和 <code>/user/bar</code> 都将映射到相同的路由。</p>
+<p>一个“路径参数”使用冒号 <code>: </code>标记。当匹配到一个路由时，参数值会被设置到 <code>this.$route.params</code>，<br>可以在每个组件内使用。于是，我们可以更新 <code>User</code> 的模板，输出当前用户的 ID：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> User = &#123;</span><br><span class="line">	template: <span class="string">&#x27;&lt;div&gt;User &#123;&#123; $route.params.id &#125;&#125;&lt;/div&gt;&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>你可以在一个路由中设置多段“路径参数”，对应的值都会设置到 <code>$route.params</code> 中。例如：</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>匹配路径</th>
+<th>$route.params</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>/user/:username</td>
+<td>/user/evan</td>
+<td><code>&#123; username: &#39;evan&#39; &#125;</code></td>
+</tr>
+<tr>
+<td>/user/:username/post/:post_id</td>
+<td>/user/evan/post/123</td>
+<td><code>&#123; username: &#39;evan&#39;, post_id:&#39;123&#39; &#125;</code></td>
+</tr>
+</tbody></table>
+<p>除了 <code>$route.params</code> 外， <code>$route</code> 对象还提供了其它有用的信息，例如， <code>$route.query</code> (如果 URL<br>中有查询参数)、 <code>$route.hash</code> 等等。</p>
+<h4 id="6、vue-router如何定义嵌套路由？"><a href="#6、vue-router如何定义嵌套路由？" class="headerlink" title="6、vue-router如何定义嵌套路由？"></a>6、vue-router如何定义嵌套路由？</h4><p>任何子路由都是在其父路由的组件中切换显示，不管是多少层的路由嵌套，都是这样的理解，所以父路由需要有以下两点，二者缺一不可</p>
+<blockquote>
+<p>有组件引用<br>组件中有router-view组件</p>
+</blockquote>
+<p>父路由没有引用组件，导致子路由没有承载容器，自然而然就出现了两层路由跳不起来等不起效的情况</p>
+<h4 id="7、-lt-router-link-gt-lt-router-link-gt-组件及其属性"><a href="#7、-lt-router-link-gt-lt-router-link-gt-组件及其属性" class="headerlink" title="7、 &lt;router-link&gt; &lt;/router-link&gt; 组件及其属性"></a>7、 <code>&lt;router-link&gt; &lt;/router-link&gt;</code> 组件及其属性</h4><p>支持用户在具有路由功能的应用中 (点击) 导航 通过 to 属性指定目标地址<br>一：router-link组件的props：</p>
+<ul>
+<li><strong>to</strong></li>
+</ul>
+<p>表示目标路由的链接。当被点击后，内部会立刻把 to 的值传到 router.push()</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;router-link :to&#x3D;&#39;&#x2F;Home&#39;&gt;Home&lt;&#x2F;router-link&gt;</span><br><span class="line">渲染结果：</span><br><span class="line">&lt;a href&#x3D;&quot;Home&quot;&gt;Home&lt;&#x2F;a&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;router-link :to&#x3D;&quot;&#123; path: &#39;register&#39;, query: &#123; name: &#39;fjw&#39; &#125;&#125;&quot;&gt;router&lt;&#x2F;routerlink&gt;</span><br><span class="line">渲染结果：</span><br><span class="line">&lt;a href&#x3D;&quot;&#x2F;register?name&#x3D;fjw&quot;&gt;router&lt;&#x2F;a&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>tag</strong></li>
+</ul>
+<p>指定<code>&lt;router-link&gt;</code>组件最终被渲染成什么标签；非必须；如果没有tag属性，<code>router-link</code>默认会被渲染成a标签。在下面的例子中，渲染成了li标签。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;router-link :to&#x3D;&#39;&#x2F;Home&#39; tag&#x3D;&quot;li&quot; &gt;Home&lt;&#x2F;router-link&gt;</span><br><span class="line">渲染结果：</span><br><span class="line">&lt;li&gt;Home&lt;&#x2F;li&gt;</span><br><span class="line">此时依旧会监听点击事件，触发导航</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>replace</strong></li>
+</ul>
+<p>当点击时，会调用 <code>router.replace() </code>而不是 <code>router.push()</code>，于是导航后不会留下 history 记录。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;router-link :to&#x3D;&quot;&#123; path: &#39;&#x2F;abc&#39;&#125;&quot; replace&gt;&lt;&#x2F;router-link&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>append</strong></li>
+</ul>
+<p>则在当前 (相对) 路径前添加基路径。/a 导航到一个相对路径 b，如果没有配置 append，则路径为 /b，如果配了，则为 /a/b</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;router-link :to&#x3D;&quot;&#123; path: &#39;relative&#x2F;path&#39;&#125;&quot; append&gt;&lt;&#x2F;router-link&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>active-class</strong></li>
+</ul>
+<p>表示激活这个链接时，添加的class，默认是<code>router-link-class</code>。默认值可以通过路由的构造选项<br><code>linkActiveClass</code> 来全局配置。</p>
+<ul>
+<li><strong>exact</strong></li>
+</ul>
+<p>“是否激活” 默认类名的依据是 inclusive match (全包含匹配)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 这个链接只会在地址为 &#x2F; 的时候被激活 --&gt;</span><br><span class="line">&lt;router-link to&#x3D;&quot;&#x2F;&quot; exact&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>event</strong></li>
+</ul>
+<p>默认值: ‘click’ 声明可以用来触发导航的事件。可以是一个字符串或是一个包含字符串的数组。</p>
+<ul>
+<li><strong>exact-active-class</strong></li>
+</ul>
+<p>默认值: “router-link-exact-active” 配置当链接被精确匹配的时候应该激活的 class。</p>
+<h4 id="8、vue-router实现路由懒加载"><a href="#8、vue-router实现路由懒加载" class="headerlink" title="8、vue-router实现路由懒加载"></a>8、vue-router实现路由懒加载</h4><p>在项目router/index.js文件中将</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> About <span class="keyword">from</span> <span class="string">&#x27;../views/About.vue&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>更改为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//方法1：</span></span><br><span class="line"><span class="keyword">const</span> About = <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="string">&#x27;../views/About&#x27;</span>)</span><br><span class="line"><span class="comment">//方法2：</span></span><br><span class="line"><span class="keyword">const</span> About = <span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">	<span class="keyword">import</span>(<span class="string">&#x27;../views/About&#x27;</span>).then(<span class="function">(<span class="params"><span class="built_in">module</span></span>) =&gt;</span> &#123;</span><br><span class="line">        resolve(<span class="built_in">module</span>)</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>即可实现路由懒加载的效果</p>
+<h4 id="9、vue-router路由的两种模式"><a href="#9、vue-router路由的两种模式" class="headerlink" title="9、vue-router路由的两种模式"></a>9、vue-router路由的两种模式</h4><p>类型: <code>string</code></p>
+<p>默认值: <code>&quot;hash&quot; (浏览器环境) | &quot;abstract&quot; (Node.js 环境)</code></p>
+<p>可选值: <code>&quot;hash&quot; | &quot;history&quot; | &quot;abstract</code></p>
+<p>配置路由模式:</p>
+<ul>
+<li><p><code>hash </code>: 使用 URL hash 值来作路由。支持所有浏览器，包括不支持 HTML5 History Api 的浏览器。</p>
+</li>
+<li><p><code>history </code>: 依赖 HTML5 History API 和服务器配置。查看 HTML5 History 模式。</p>
+</li>
+<li><p><code>abstract </code>: 支持所有 JavaScript 运行环境，如 Node.js 服务器端。<strong>如果发现没有浏览器的 API，路由会自动强制进入这个模式</strong></p>
+</li>
+</ul>
+<h5 id="Hash模式"><a href="#Hash模式" class="headerlink" title="Hash模式"></a><strong>Hash模式</strong></h5><p>Hash 模式是 Vue-Router 的默认模式，具体的体现是在浏览器地址栏上 URL 路径永远带着一个「#」号。在浏览器支持度上面，Hash 模式是比较强势的，甚至能兼容低版本的 IE 浏览器。「#」号后面内容的改变，不会引起页面对服务端的请求，所以也就不会重新加载页面。在部署服务器方面，个人认为 Hash 模式比 History 模式来得更为方便，因为 History 有 URL 重定向问题，需要在服务端去配置 url 重定向，否则会报 404 错误。市面上也有不少大厂是使用 Hash 模式进行开发的，比如网易云音乐</p>
+<h5 id="History-模式"><a href="#History-模式" class="headerlink" title="History 模式"></a><strong>History 模式</strong></h5><p>HTML5 History API 提供了一个 <code>history.pushState</code> 和 <code>history.reolaceState</code> 方法（浏览器支持情况不是很乐观），它能让开发人员在不刷新网页的情况下改变站点的 URL。因为 Hash 模式会带上一个「#」号，会让 URL 地址变得比较难看，所以很多开发者都会选择 History 模式开发。但有个缺点，前端的 URL 必须和实际向服务端发起的请求的 URL 保持一致，如果服务端没有对相应的路由做处理，则会返回 404 错误页面。</p>
+<blockquote>
+<p>拓展：前进，后退，跳转操作方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">history.go(-<span class="number">3</span>);<span class="comment">//后退3次</span></span><br><span class="line">history.go(<span class="number">2</span>);<span class="comment">//前进2次</span></span><br><span class="line">history.go(<span class="number">0</span>);<span class="comment">//刷新当前页面</span></span><br><span class="line">history.back(); <span class="comment">//后退</span></span><br><span class="line">history.forward(); <span class="comment">//前进</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h5 id="abstract-模式"><a href="#abstract-模式" class="headerlink" title="abstract 模式"></a><strong>abstract 模式</strong></h5><p>abstract 模式针对的是没有浏览器环境的情况，比如 Weex 客户端开发，内部是没有浏览器 API 的，那么 Vue-Router 自身会对环境做校验，强制切换到 abstract 模式，如果默认在 Vue-Router 的配置项中不写 mode 的值，在浏览器环境下会默认启用 Hash 模式，在移动客户端下使用 abstract 模式。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Jungle</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/05/05/VueBasis-VueRouter/">http://example.com/2021/05/05/VueBasis-VueRouter/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Jungle</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Vue/">Vue</a></div><div class="post_share"><div class="social-share" data-image="/../images/cover/VueBasis.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechatpay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechatpay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/05/07/VueBasis-Vuex/"><img class="prev-cover" src="/../images/cover/VueBasis.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Vue基础知识总结-Vuex</div></div></a></div><div class="next-post pull-right"><a href="/2021/05/03/VueBasis-VueCli/"><img class="next-cover" src="/../images/cover/VueBasis.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Vue基础知识总结-Vue-cli工程</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/04/09/Vue-MVVM/" title="Vue-MVVM浅析"><img class="cover" src="/../images/cover/VueCover.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-04-09</div><div class="title">Vue-MVVM浅析</div></div></a></div><div><a href="/2021/05/03/VueBasis-VueCli/" title="Vue基础知识总结-Vue-cli工程"><img class="cover" src="/../images/cover/VueBasis.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-03</div><div class="title">Vue基础知识总结-Vue-cli工程</div></div></a></div><div><a href="/2021/04/29/Vue-directive/" title="Vue自定义指令"><img class="cover" src="/images/cover/VueCover.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-04-29</div><div class="title">Vue自定义指令</div></div></a></div><div><a href="/2021/05/07/VueBasis-Vuex/" title="Vue基础知识总结-Vuex"><img class="cover" src="/../images/cover/VueBasis.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-07</div><div class="title">Vue基础知识总结-Vuex</div></div></a></div><div><a href="/2021/03/15/VueReview-API-LifeCycle/" title="Vue复习之旅-全局API及生命周期"><img class="cover" src="/../images/cover/VueReview.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-15</div><div class="title">Vue复习之旅-全局API及生命周期</div></div></a></div><div><a href="/2021/03/16/VueReview-VueCli/" title="Vue复习之旅-Vue-cli篇"><img class="cover" src="/images/cover/VueReview.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-16</div><div class="title">Vue复习之旅-Vue-cli篇</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Jungle</div><div class="author-info__description">喜欢交友，爱好编程，欢迎大家与我一起交流，共同进步！</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">71</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/qsbit"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/qsbit" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:jungleemail@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=965499224&amp;site=qq&amp;menu=yes" target="_blank" title=""><i class="fab fa-qq"></i></a><a class="social-icon" href="https://qsbit.gitee.io/atom.xml" target="_blank" title=""><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">You make me want to be a better man！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#vue-router"><span class="toc-number">1.</span> <span class="toc-text">vue-router</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81vue-router%E5%A6%82%E4%BD%95%E5%93%8D%E5%BA%94-%E8%B7%AF%E7%94%B1%E5%8F%82%E6%95%B0-%E7%9A%84%E5%8F%98%E5%8C%96%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">1、vue-router如何响应 路由参数 的变化？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E5%AE%8C%E6%95%B4%E7%9A%84-vue-router-%E5%AF%BC%E8%88%AA%E8%A7%A3%E6%9E%90%E6%B5%81"><span class="toc-number">1.2.</span> <span class="toc-text">2、完整的 vue-router 导航解析流</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81vue-router%E6%9C%89%E5%93%AA%E5%87%A0%E7%A7%8D%E5%AF%BC%E8%88%AA%E9%92%A9%E5%AD%90%EF%BC%88-%E5%AF%BC%E8%88%AA%E5%AE%88%E5%8D%AB-%EF%BC%89%EF%BC%9F"><span class="toc-number">1.3.</span> <span class="toc-text">3、vue-router有哪几种导航钩子（ 导航守卫 ）？</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%89%8D%E7%BD%AE%E5%AE%88%E5%8D%AB"><span class="toc-number">1.3.1.</span> <span class="toc-text">全局前置守卫</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E8%A7%A3%E6%9E%90%E5%AE%88%E5%8D%AB"><span class="toc-number">1.3.2.</span> <span class="toc-text">全局解析守卫</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%90%8E%E7%BD%AE%E9%92%A9%E5%AD%90"><span class="toc-number">1.3.3.</span> <span class="toc-text">全局后置钩子</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E7%8B%AC%E4%BA%AB%E7%9A%84%E5%AE%88%E5%8D%AB"><span class="toc-number">1.3.4.</span> <span class="toc-text">路由独享的守卫</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E5%86%85%E7%9A%84%E5%AE%88%E5%8D%AB"><span class="toc-number">1.3.5.</span> <span class="toc-text">组件内的守卫</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81vue-router%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-number">1.4.</span> <span class="toc-text">4、vue-router传递参数的几种方式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1%EF%BC%89%E4%BD%BF%E7%94%A8name%E4%BC%A0%E9%80%92"><span class="toc-number">1.4.1.</span> <span class="toc-text">1）使用name传递</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2%EF%BC%89to%E6%9D%A5%E4%BC%A0%E9%80%92"><span class="toc-number">1.4.2.</span> <span class="toc-text">2）to来传递</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3%EF%BC%89%E9%87%87%E7%94%A8url%E4%BC%A0%E5%8F%82"><span class="toc-number">1.4.3.</span> <span class="toc-text">3）采用url传参</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5%E3%80%81vue-router%E7%9A%84%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1%E5%8C%B9%E9%85%8D"><span class="toc-number">1.5.</span> <span class="toc-text">5、vue-router的动态路由匹配</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6%E3%80%81vue-router%E5%A6%82%E4%BD%95%E5%AE%9A%E4%B9%89%E5%B5%8C%E5%A5%97%E8%B7%AF%E7%94%B1%EF%BC%9F"><span class="toc-number">1.6.</span> <span class="toc-text">6、vue-router如何定义嵌套路由？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7%E3%80%81-lt-router-link-gt-lt-router-link-gt-%E7%BB%84%E4%BB%B6%E5%8F%8A%E5%85%B6%E5%B1%9E%E6%80%A7"><span class="toc-number">1.7.</span> <span class="toc-text">7、 &lt;router-link&gt; &lt;&#x2F;router-link&gt; 组件及其属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8%E3%80%81vue-router%E5%AE%9E%E7%8E%B0%E8%B7%AF%E7%94%B1%E6%87%92%E5%8A%A0%E8%BD%BD"><span class="toc-number">1.8.</span> <span class="toc-text">8、vue-router实现路由懒加载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9%E3%80%81vue-router%E8%B7%AF%E7%94%B1%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.9.</span> <span class="toc-text">9、vue-router路由的两种模式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Hash%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.9.1.</span> <span class="toc-text">Hash模式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#History-%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.9.2.</span> <span class="toc-text">History 模式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#abstract-%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.9.3.</span> <span class="toc-text">abstract 模式</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/05/07/VueBasis-Vuex/" title="Vue基础知识总结-Vuex"><img src="/../images/cover/VueBasis.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vue基础知识总结-Vuex"/></a><div class="content"><a class="title" href="/2021/05/07/VueBasis-Vuex/" title="Vue基础知识总结-Vuex">Vue基础知识总结-Vuex</a><time datetime="2021-05-07T11:13:15.000Z" title="发表于 2021-05-07 19:13:15">2021-05-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/05/VueBasis-VueRouter/" title="Vue基础知识总结-VueRouter"><img src="/../images/cover/VueBasis.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vue基础知识总结-VueRouter"/></a><div class="content"><a class="title" href="/2021/05/05/VueBasis-VueRouter/" title="Vue基础知识总结-VueRouter">Vue基础知识总结-VueRouter</a><time datetime="2021-05-05T06:32:25.000Z" title="发表于 2021-05-05 14:32:25">2021-05-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/03/VueBasis-VueCli/" title="Vue基础知识总结-Vue-cli工程"><img src="/../images/cover/VueBasis.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vue基础知识总结-Vue-cli工程"/></a><div class="content"><a class="title" href="/2021/05/03/VueBasis-VueCli/" title="Vue基础知识总结-Vue-cli工程">Vue基础知识总结-Vue-cli工程</a><time datetime="2021-05-03T04:22:45.000Z" title="发表于 2021-05-03 12:22:45">2021-05-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/01/VueBasis-Core/" title="Vue基础知识总结-核心知识点"><img src="/../images/cover/VueBasis.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vue基础知识总结-核心知识点"/></a><div class="content"><a class="title" href="/2021/05/01/VueBasis-Core/" title="Vue基础知识总结-核心知识点">Vue基础知识总结-核心知识点</a><time datetime="2021-05-01T01:13:11.000Z" title="发表于 2021-05-01 09:13:11">2021-05-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/04/29/Vue-directive/" title="Vue自定义指令"><img src="/images/cover/VueCover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vue自定义指令"/></a><div class="content"><a class="title" href="/2021/04/29/Vue-directive/" title="Vue自定义指令">Vue自定义指令</a><time datetime="2021-04-29T04:10:54.000Z" title="发表于 2021-04-29 12:10:54">2021-04-29</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Jungle</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a target="_blank" rel="noopener" href="https://qsbit.github.io/">Blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'default',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script></div><script src="https://apip.weatherdt.com/simple/static/js/weather-simple-common.js?v=2.0"></script><script src="/js/weather.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
