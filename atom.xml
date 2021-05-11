@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-05-11T09:02:14.413Z</updated>
+  <updated>2021-05-11T09:21:20.105Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://example.com/2021/05/11/Air%20Conditioner/"/>
     <id>http://example.com/2021/05/11/Air%20Conditioner/</id>
     <published>2021-05-11T08:45:22.000Z</published>
-    <updated>2021-05-11T09:02:14.413Z</updated>
+    <updated>2021-05-11T09:21:20.105Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="分享一个好玩儿的小项目（Air-Conditioner）"><a href="#分享一个好玩儿的小项目（Air-Conditioner）" class="headerlink" title="分享一个好玩儿的小项目（Air Conditioner）"></a>分享一个好玩儿的小项目（Air Conditioner）</h3><p>下载方式：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/YunYouJun/air-conditioner.git</span><br></pre></td></tr></table></figure><p>运行方式：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install &amp; yarn install</span><br><span class="line">yarn start</span><br></pre></td></tr></table></figure><p>iframe安装使用：</p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">height</span>=<span class="string">&quot;740&quot;</span> <span class="attr">src</span>=<span class="string">&quot;https://ac.yunyoujun.cn&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure><p>项目演示如下：</p><iframe   height=740  src="https://ac.yunyoujun.cn/"   frameborder=0   allowfullscreen> </iframe>]]></content>
+    <content type="html"><![CDATA[<h3 id="分享一个好玩儿的小项目（Air-Conditioner）"><a href="#分享一个好玩儿的小项目（Air-Conditioner）" class="headerlink" title="分享一个好玩儿的小项目（Air Conditioner）"></a>分享一个好玩儿的小项目（Air Conditioner）</h3><p>项目演示如下：</p><iframe   height=740  width=100% src="https://ac.yunyoujun.cn/"   frameborder=0   allowfullscreen> </iframe> 下载方式：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/YunYouJun/air-conditioner.git</span><br></pre></td></tr></table></figure><p>运行方式：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install &amp; yarn install</span><br><span class="line">yarn start</span><br></pre></td></tr></table></figure><p>iframe安装使用：</p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">height</span>=<span class="string">&quot;740&quot;</span> <span class="attr">src</span>=<span class="string">&quot;https://ac.yunyoujun.cn&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>]]></content>
     
     
       
