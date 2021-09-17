@@ -1,0 +1,173 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>剖析vue.js内部运行机制01 | Jungle</title><meta name="keywords" content="源码,vue源码"><meta name="author" content="Jungle"><meta name="copyright" content="Jungle"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="文章转载自看云《剖析vue.js内部运行机制》 Vue.js 运行机制全局概览全局概览这一节笔者将为大家介绍一下 Vue.js 内部的整个流程，希望能让大家对全局有一个整体的印象，然后我们再来逐个模块进行讲解。从来没有了解过 Vue.js 实现的同学可能会对一些内容感到疑惑，这是很正常的，这一节的目的主要是为了让大家对整个流程有一个大概的认识，算是一个概览预备的过程，当把整本小册认真读完以后，再来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="剖析vue.js内部运行机制01">
+<meta property="og:url" content="http://example.com/2021/07/27/vue2-core01/index.html">
+<meta property="og:site_name" content="Jungle">
+<meta property="og:description" content="文章转载自看云《剖析vue.js内部运行机制》 Vue.js 运行机制全局概览全局概览这一节笔者将为大家介绍一下 Vue.js 内部的整个流程，希望能让大家对全局有一个整体的印象，然后我们再来逐个模块进行讲解。从来没有了解过 Vue.js 实现的同学可能会对一些内容感到疑惑，这是很正常的，这一节的目的主要是为了让大家对整个流程有一个大概的认识，算是一个概览预备的过程，当把整本小册认真读完以后，再来">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/cover/vue-core.png">
+<meta property="article:published_time" content="2021-07-27T07:17:49.000Z">
+<meta property="article:modified_time" content="2021-09-17T08:07:02.359Z">
+<meta property="article:author" content="Jungle">
+<meta property="article:tag" content="源码">
+<meta property="article:tag" content="vue源码">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/cover/vue-core.png"><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="http://example.com/2021/07/27/vue2-core01/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-09-17 16:07:02'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Jungle" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">87</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">48</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 爱好</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> 留声机</span></a></li><li><a class="site-page" href="/books/"><i class="fa-fw fas fa-book"></i><span> 读书架</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 观影区</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/foot/"><i class="fa-fw fas fa-paw"></i><span> 足迹</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/../images/cover/vue-core.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Jungle</a></span><span id="weather-v2-plugin-simple"></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 爱好</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> 留声机</span></a></li><li><a class="site-page" href="/books/"><i class="fa-fw fas fa-book"></i><span> 读书架</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 观影区</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/foot/"><i class="fa-fw fas fa-paw"></i><span> 足迹</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">剖析vue.js内部运行机制01<a class="post-edit-link" href="null_posts/vue2-core01.md" title="编辑" target="_blank"><i class="fas fa-pencil-alt"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-07-27T07:17:49.000Z" title="发表于 2021-07-27 15:17:49">2021-07-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-09-17T08:07:02.359Z" title="更新于 2021-09-17 16:07:02">2021-09-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Vue/">Vue</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Vue/%E6%BA%90%E7%A0%81/">源码</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>文章转载自<a target="_blank" rel="noopener" href="https://www.kancloud.cn/sllyli/vuejs">看云</a>《剖析vue.js内部运行机制》</p>
+<h2 id="Vue-js-运行机制全局概览"><a href="#Vue-js-运行机制全局概览" class="headerlink" title="Vue.js 运行机制全局概览"></a>Vue.js 运行机制全局概览</h2><h2 id="全局概览"><a href="#全局概览" class="headerlink" title="全局概览"></a>全局概览</h2><p>这一节笔者将为大家介绍一下 Vue.js 内部的整个流程，希望能让大家对全局有一个整体的印象，然后我们再来逐个模块进行讲解。从来没有了解过 Vue.js 实现的同学可能会对一些内容感到疑惑，这是很正常的，这一节的目的主要是为了让大家对整个流程有一个大概的认识，算是一个概览预备的过程，当把整本小册认真读完以后，再来阅读这一节，相信会有收获的。</p>
+<p>首先我们来看一下笔者画的内部流程图。</p>
+<p><img src="https://img.kancloud.cn/01/db/01db136b4380b1804c072899e92daa3d_1752x1216.gif" alt="img"></p>
+<p>大家第一次看到这个图一定是一头雾水的，没有关系，我们来逐个讲一下这些模块的作用以及调用关系。相信讲完之后大家对Vue.js内部运行机制会有一个大概的认识。</p>
+<h2 id="初始化及挂载"><a href="#初始化及挂载" class="headerlink" title="初始化及挂载"></a>初始化及挂载</h2><p><img src="https://img.kancloud.cn/c4/dd/c4dd695d1c4423aeb8ea55e67fff486d_828x336.gif" alt="img"></p>
+<p>在 <code>new Vue()</code> 之后。 Vue 会调用 <code>_init</code> 函数进行初始化，也就是这里的 <code>init</code> 过程，它会初始化生命周期、事件、 props、 methods、 data、 computed 与 watch 等。其中最重要的是通过 <code>Object.defineProperty</code> 设置 <code>setter</code> 与 <code>getter</code> 函数，用来实现「<strong>响应式</strong>」以及「<strong>依赖收集</strong>」，后面会详细讲到，这里只要有一个印象即可。</p>
+<p>初始化之后调用 <code>$mount</code> 会挂载组件，如果是运行时编译，即不存在 render function 但是存在 template 的情况，需要进行「<strong>编译</strong>」步骤。</p>
+<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><p>compile编译可以分成 <code>parse</code>、<code>optimize</code> 与 <code>generate</code> 三个阶段，最终需要得到 render function。</p>
+<p><img src="https://img.kancloud.cn/7e/80/7e80fcd4e490557058f4e19af76e5795_824x496.gif" alt="img"></p>
+<h3 id="parse"><a href="#parse" class="headerlink" title="parse"></a>parse</h3><p><code>parse</code> 会用正则等方式解析 template 模板中的指令、class、style等数据，形成AST。</p>
+<h3 id="optimize"><a href="#optimize" class="headerlink" title="optimize"></a>optimize</h3><p><code>optimize</code> 的主要作用是标记 static 静态节点，这是 Vue 在编译过程中的一处优化，后面当 <code>update</code> 更新界面时，会有一个 <code>patch</code> 的过程， diff 算法会直接跳过静态节点，从而减少了比较的过程，优化了 <code>patch</code> 的性能。</p>
+<h3 id="generate"><a href="#generate" class="headerlink" title="generate"></a>generate</h3><p><code>generate</code> 是将 AST 转化成 render function 字符串的过程，得到结果是 render 的字符串以及 staticRenderFns 字符串。</p>
+<p>在经历过 <code>parse</code>、<code>optimize</code> 与 <code>generate</code> 这三个阶段以后，组件中就会存在渲染 VNode 所需的 render function 了。</p>
+<h2 id="响应式"><a href="#响应式" class="headerlink" title="响应式"></a>响应式</h2><p>接下来也就是 Vue.js 响应式核心部分。</p>
+<p><img src="https://img.kancloud.cn/3f/32/3f32fe9400f1f726e6d10eadd342b277_1460x728.gif" alt="img"></p>
+<p>这里的 <code>getter</code> 跟 <code>setter</code> 已经在之前介绍过了，在 <code>init</code> 的时候通过 <code>Object.defineProperty</code> 进行了绑定，它使得当被设置的对象被读取的时候会执行 <code>getter</code> 函数，而在当被赋值的时候会执行 <code>setter</code> 函数。</p>
+<p>当 render function 被渲染的时候，因为会读取所需对象的值，所以会触发 <code>getter</code> 函数进行「<strong>依赖收集</strong>」，「<strong>依赖收集</strong>」的目的是将观察者 Watcher 对象存放到当前闭包中的订阅者 Dep 的 subs 中。形成如下所示的这样一个关系。</p>
+<p><img src="https://img.kancloud.cn/43/c8/43c84091dc595cdf3eb9db090b7aec13_520x245.gif" alt="img"></p>
+<p>在修改对象的值的时候，会触发对应的 <code>setter</code>， <code>setter</code> 通知之前「<strong>依赖收集</strong>」得到的 Dep 中的每一个 Watcher，告诉它们自己的值改变了，需要重新渲染视图。这时候这些 Watcher 就会开始调用 <code>update</code> 来更新视图，当然这中间还有一个 <code>patch</code> 的过程以及使用队列来异步更新的策略，这个我们后面再讲。</p>
+<h2 id="Virtual-DOM"><a href="#Virtual-DOM" class="headerlink" title="Virtual DOM"></a>Virtual DOM</h2><p>我们知道，render function 会被转化成 VNode 节点。Virtual DOM 其实就是一棵以 JavaScript 对象（ VNode 节点）作为基础的树，用对象属性来描述节点，实际上它只是一层对真实 DOM 的抽象。最终可以通过一系列操作使这棵树映射到真实环境上。由于 Virtual DOM 是以 JavaScript 对象为基础而不依赖真实平台环境，所以使它具有了跨平台的能力，比如说浏览器平台、Weex、Node 等。</p>
+<p>比如说下面这样一个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    tag: <span class="string">&#x27;div&#x27;</span>,                 <span class="comment">/*说明这是一个div标签*/</span></span><br><span class="line">    children: [                 <span class="comment">/*存放该标签的子节点*/</span></span><br><span class="line">        &#123;</span><br><span class="line">            tag: <span class="string">&#x27;a&#x27;</span>,           <span class="comment">/*说明这是一个a标签*/</span></span><br><span class="line">            text: <span class="string">&#x27;click me&#x27;</span>    <span class="comment">/*标签的内容*/</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>渲染后可以得到</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line">    &lt;a&gt;click me&lt;/a&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这只是一个简单的例子，实际上的节点有更多的属性来标志节点，比如 isStatic （代表是否为静态节点）、 isComment （代表是否为注释节点）等。</p>
+<h2 id="更新视图"><a href="#更新视图" class="headerlink" title="更新视图"></a>更新视图</h2><p><img src="https://img.kancloud.cn/d1/dc/d1dc77e6aec6a13caa86bc32afd24509_731x339.gif" alt="img"></p>
+<p>前面我们说到，在修改一个对象值的时候，会通过 <code>setter -&gt; Watcher -&gt; update</code> 的流程来修改对应的视图，那么最终是如何更新视图的呢？</p>
+<p>当数据变化后，执行 render function 就可以得到一个新的 VNode 节点，我们如果想要得到新的视图，最简单粗暴的方法就是直接解析这个新的 VNode 节点，然后用 <code>innerHTML</code> 直接全部渲染到真实 DOM 中。但是其实我们只对其中的一小块内容进行了修改，这样做似乎有些「<strong>浪费</strong>」。</p>
+<p>那么我们为什么不能只修改那些「改变了的地方」呢？这个时候就要介绍我们的「**<code>patch</code><strong>」了。我们会将新的 VNode 与旧的 VNode 一起传入 <code>patch</code> 进行比较，经过 diff 算法得出它们的「</strong>差异<strong>」。最后我们只需要将这些「</strong>差异**」的对应 DOM 进行修改即可。</p>
+<h2 id="再看全局"><a href="#再看全局" class="headerlink" title="再看全局"></a>再看全局</h2><p><img src="https://img.kancloud.cn/01/db/01db136b4380b1804c072899e92daa3d_1752x1216.gif" alt="img"></p>
+<p>回过头再来看看这张图，是不是大脑中已经有一个大概的脉络了呢？</p>
+<p><strong>那么，让我们继续学习每一个模块吧!</strong></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Jungle</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/07/27/vue2-core01/">http://example.com/2021/07/27/vue2-core01/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Jungle</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%BA%90%E7%A0%81/">源码</a><a class="post-meta__tags" href="/tags/vue%E6%BA%90%E7%A0%81/">vue源码</a></div><div class="post_share"><div class="social-share" data-image="/../images/cover/vue-core.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechatpay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechatpay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/07/31/vue2-core02/"><img class="prev-cover" src="/../images/cover/vue-core.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">剖析vue.js内部运行机制02</div></div></a></div><div class="next-post pull-right"><a href="/2021/07/15/interview-exp01/"><img class="next-cover" src="/../images/cover/FE-Interview.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">前端面试exp01</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/07/31/vue2-core02/" title="剖析vue.js内部运行机制02"><img class="cover" src="/../images/cover/vue-core.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-31</div><div class="title">剖析vue.js内部运行机制02</div></div></a></div><div><a href="/2021/08/03/vue2-core03/" title="剖析vue.js内部运行机制03"><img class="cover" src="/../images/cover/vue-core.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-03</div><div class="title">剖析vue.js内部运行机制03</div></div></a></div><div><a href="/2021/08/07/vue2-core04/" title="剖析vue.js内部运行机制04"><img class="cover" src="/../images/cover/vue-core.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-07</div><div class="title">剖析vue.js内部运行机制04</div></div></a></div><div><a href="/2021/08/17/vue2-core07/" title="剖析vue.js内部运行机制07"><img class="cover" src="/../images/cover/vue-core.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-17</div><div class="title">剖析vue.js内部运行机制07</div></div></a></div><div><a href="/2021/08/24/vue2-core09/" title="剖析vue.js内部运行机制09"><img class="cover" src="/../images/cover/vue-core.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-24</div><div class="title">剖析vue.js内部运行机制09</div></div></a></div><div><a href="/2021/08/21/vue2-core08/" title="剖析vue.js内部运行机制08"><img class="cover" src="/../images/cover/vue-core.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-21</div><div class="title">剖析vue.js内部运行机制08</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Jungle</div><div class="author-info__description">喜欢交友，爱好编程，欢迎大家与我一起交流，共同进步！</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">87</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">48</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/qsbit"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/qsbit" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:jungleemail@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=965499224&amp;site=qq&amp;menu=yes" target="_blank" title=""><i class="fab fa-qq"></i></a><a class="social-icon" href="https://qsbit.gitee.io/atom.xml" target="_blank" title=""><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">You make me want to be a better man！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Vue-js-%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6%E5%85%A8%E5%B1%80%E6%A6%82%E8%A7%88"><span class="toc-number">1.</span> <span class="toc-text">Vue.js 运行机制全局概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E6%A6%82%E8%A7%88"><span class="toc-number">2.</span> <span class="toc-text">全局概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%8F%8A%E6%8C%82%E8%BD%BD"><span class="toc-number">3.</span> <span class="toc-text">初始化及挂载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%AF%91"><span class="toc-number">4.</span> <span class="toc-text">编译</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#parse"><span class="toc-number">4.1.</span> <span class="toc-text">parse</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#optimize"><span class="toc-number">4.2.</span> <span class="toc-text">optimize</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#generate"><span class="toc-number">4.3.</span> <span class="toc-text">generate</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%93%8D%E5%BA%94%E5%BC%8F"><span class="toc-number">5.</span> <span class="toc-text">响应式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Virtual-DOM"><span class="toc-number">6.</span> <span class="toc-text">Virtual DOM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E8%A7%86%E5%9B%BE"><span class="toc-number">7.</span> <span class="toc-text">更新视图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%8D%E7%9C%8B%E5%85%A8%E5%B1%80"><span class="toc-number">8.</span> <span class="toc-text">再看全局</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/08/24/vue2-core09/" title="剖析vue.js内部运行机制09"><img src="/../images/cover/vue-core.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="剖析vue.js内部运行机制09"/></a><div class="content"><a class="title" href="/2021/08/24/vue2-core09/" title="剖析vue.js内部运行机制09">剖析vue.js内部运行机制09</a><time datetime="2021-08-24T07:17:49.000Z" title="发表于 2021-08-24 15:17:49">2021-08-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/08/21/vue2-core08/" title="剖析vue.js内部运行机制08"><img src="/../images/cover/vue-core.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="剖析vue.js内部运行机制08"/></a><div class="content"><a class="title" href="/2021/08/21/vue2-core08/" title="剖析vue.js内部运行机制08">剖析vue.js内部运行机制08</a><time datetime="2021-08-21T07:17:49.000Z" title="发表于 2021-08-21 15:17:49">2021-08-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/08/17/vue2-core07/" title="剖析vue.js内部运行机制07"><img src="/../images/cover/vue-core.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="剖析vue.js内部运行机制07"/></a><div class="content"><a class="title" href="/2021/08/17/vue2-core07/" title="剖析vue.js内部运行机制07">剖析vue.js内部运行机制07</a><time datetime="2021-08-17T07:17:49.000Z" title="发表于 2021-08-17 15:17:49">2021-08-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/08/14/vue2-core06/" title="剖析vue.js内部运行机制06"><img src="/../images/cover/vue-core.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="剖析vue.js内部运行机制06"/></a><div class="content"><a class="title" href="/2021/08/14/vue2-core06/" title="剖析vue.js内部运行机制06">剖析vue.js内部运行机制06</a><time datetime="2021-08-14T07:17:49.000Z" title="发表于 2021-08-14 15:17:49">2021-08-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/08/10/vue2-core05/" title="剖析vue.js内部运行机制05"><img src="/../images/cover/vue-core.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="剖析vue.js内部运行机制05"/></a><div class="content"><a class="title" href="/2021/08/10/vue2-core05/" title="剖析vue.js内部运行机制05">剖析vue.js内部运行机制05</a><time datetime="2021-08-10T07:17:49.000Z" title="发表于 2021-08-10 15:17:49">2021-08-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Jungle</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a target="_blank" rel="noopener" href="https://qsbit.github.io/">Blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'default',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script></div><script src="https://apip.weatherdt.com/simple/static/js/weather-simple-common.js?v=2.0"></script><script src="/js/weather.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
