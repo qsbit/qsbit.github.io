@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-09-23T14:22:11.923Z</updated>
+  <updated>2021-09-23T14:24:10.485Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>前端面试exp00</title>
+    <title>前端面试exp02</title>
     <link href="http://example.com/2021/09/23/interview-exp02/"/>
     <id>http://example.com/2021/09/23/interview-exp02/</id>
     <published>2021-09-23T13:50:13.000Z</published>
-    <updated>2021-09-23T14:22:11.923Z</updated>
+    <updated>2021-09-23T14:24:10.485Z</updated>
     
     <content type="html"><![CDATA[<h2 id="自我介绍"><a href="#自我介绍" class="headerlink" title="自我介绍"></a>自我介绍</h2><h2 id="项目介绍-做什么的"><a href="#项目介绍-做什么的" class="headerlink" title="项目介绍(做什么的)"></a>项目介绍(做什么的)</h2><h2 id="平台用户角色不同权限怎么做校验"><a href="#平台用户角色不同权限怎么做校验" class="headerlink" title="平台用户角色不同权限怎么做校验"></a>平台用户角色不同权限怎么做校验</h2><h2 id="复制已登录角色链接到其他浏览器，会发生什么"><a href="#复制已登录角色链接到其他浏览器，会发生什么" class="headerlink" title="复制已登录角色链接到其他浏览器，会发生什么"></a>复制已登录角色链接到其他浏览器，会发生什么</h2><h2 id="如何拆分和设计组件"><a href="#如何拆分和设计组件" class="headerlink" title="如何拆分和设计组件"></a>如何拆分和设计组件</h2><p>1、使用的场景：不同的场景需求也不一样</p><p>2、组件对外暴露的字段</p><h2 id="什么是面向对象"><a href="#什么是面向对象" class="headerlink" title="什么是面向对象"></a>什么是面向对象</h2><h2 id="继承的设计上，是为了方便什么"><a href="#继承的设计上，是为了方便什么" class="headerlink" title="继承的设计上，是为了方便什么"></a>继承的设计上，是为了方便什么</h2><p>1、简单来说是为了更好复用代码</p><p>2、js怎么实现封装和继承</p><h2 id="对MVVM框架的理解"><a href="#对MVVM框架的理解" class="headerlink" title="对MVVM框架的理解"></a>对MVVM框架的理解</h2><p>vm是连接视图层和数据层的桥梁</p><h2 id="双向绑定的原理"><a href="#双向绑定的原理" class="headerlink" title="双向绑定的原理"></a>双向绑定的原理</h2><p>数据劫持，监听-发布类</p><h2 id="vue中的key是做什么用的"><a href="#vue中的key是做什么用的" class="headerlink" title="vue中的key是做什么用的"></a>vue中的key是做什么用的</h2><p>diff算法简述</p><h2 id="vue不能对数组中的某一个数组进行变更原因"><a href="#vue不能对数组中的某一个数组进行变更原因" class="headerlink" title="vue不能对数组中的某一个数组进行变更原因"></a>vue不能对数组中的某一个数组进行变更原因</h2><p>MVVM框架，数据操作视图。对data对象中的数据进行监听，当侦测到数据改变时相应数据所影响的页面也会触发更新。所以我们所需要的这些响应式数据，受到javascript的限制，vue不能检测到对象属性的添加或删除，因为Vue利用的是Object的defineProperty()方法，在初始化实列时将属性转为getter/setter，所以属性必须在data对象上才能让vue转换它。<br> 当然这只是一般的属性，以一般字符串，数字，布尔值这样的基本数据类型作为属性值的响应，当然我们有时候的诉求的初始化属性的属性值不只有这样的基本数据变量，我们还会用到数组，对象这样的引用数据变量。引用数据变量就是对地址的引用，只是对象的指针发生变化，并没有重新生成一个对象</p><h2 id="数组内部元素更新，没有触发重绘"><a href="#数组内部元素更新，没有触发重绘" class="headerlink" title="数组内部元素更新，没有触发重绘"></a>数组内部元素更新，没有触发重绘</h2><h2 id="栈和堆的理解"><a href="#栈和堆的理解" class="headerlink" title="栈和堆的理解"></a>栈和堆的理解</h2><p>声明用栈，new用堆<br>所有的变量都是在栈里面存的<br>对象在堆里面存的<br>所有的对象都是通过地址引用到栈里面的</p><p>简单点理解栈里存放着局部变量，堆里存放着所有new出来的东西。<br>而两者可是实现关联是因为堆里面带着栈的内存地址。</p><p>堆是在程序运行时，而不是在程序编译时，申请某个大小的内存空间。即动态分配内存，对其访问和对一般内存的访问没有区别。{堆是指程序运行是申请的动态内存，而栈只是指一种使用堆的方法(即先进后出)。</p><p>栈是先进后出的，但是于堆而言却没有这个特性，两者都是存放临时数据的地方。 对于堆，我们可以随心所欲的进行增加变量和删除变量</p><h2 id="js如何实现一个栈"><a href="#js如何实现一个栈" class="headerlink" title="js如何实现一个栈"></a>js如何实现一个栈</h2><h2 id="rem和em的区别是什么"><a href="#rem和em的区别是什么" class="headerlink" title="rem和em的区别是什么"></a>rem和em的区别是什么</h2><h2 id="flex-grow是什么意思"><a href="#flex-grow是什么意思" class="headerlink" title="flex-grow是什么意思"></a>flex-grow是什么意思</h2><p>父元素flex布局宽度500px，有三个子元素，宽度都是100px，同时flex-grow 为 1 1 2，计算子元素真实宽度。</p><h2 id="position有哪些，特点"><a href="#position有哪些，特点" class="headerlink" title="position有哪些，特点"></a>position有哪些，特点</h2><p>static：所有元素在默认的情况下position属性均为static</p><p>relative：相对于自身定位，移动</p><p>absolute：相对于第一个非static方式定位</p><p>fixed：浏览器根元素固定为浏览器窗口</p><h2 id="盒模型宽度计算"><a href="#盒模型宽度计算" class="headerlink" title="盒模型宽度计算"></a>盒模型宽度计算</h2><h2 id="https的加密解密过程"><a href="#https的加密解密过程" class="headerlink" title="https的加密解密过程"></a>https的加密解密过程</h2><h2 id="promise用的多吗，没用…"><a href="#promise用的多吗，没用…" class="headerlink" title="promise用的多吗，没用…"></a>promise用的多吗，没用…</h2><h2 id="实现一个多维数组求和"><a href="#实现一个多维数组求和" class="headerlink" title="实现一个多维数组求和"></a>实现一个多维数组求和</h2><p>const arr = [1,2,3,[1,2,[3]]]</p><p>求最后1+2+3+1+2+3的和</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">total</span>(<span class="params">arr</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> sum = <span class="number">0</span></span><br><span class="line">        arr.forEach(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="built_in">Array</span>.isArray(item)) &#123;</span><br><span class="line">                sum += total(item); <span class="comment">//递归去处理数组元素</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                sum += item</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="keyword">return</span> sum</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="built_in">console</span>.log(total([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,[<span class="number">1</span>,<span class="number">2</span>,[<span class="number">3</span>]]])) <span class="comment">// 45</span></span><br></pre></td></tr></table></figure>]]></content>
     
@@ -35,6 +35,8 @@
     
     <category term="FE-Interview" scheme="http://example.com/categories/FE-Interview/"/>
     
+    
+    <category term="面试" scheme="http://example.com/tags/%E9%9D%A2%E8%AF%95/"/>
     
   </entry>
   
