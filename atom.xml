@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-12-16T13:43:34.686Z</updated>
+  <updated>2021-12-20T05:06:19.528Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>版本号的正确打开方式</title>
+    <link href="http://example.com/2021/12/20/version-range/"/>
+    <id>http://example.com/2021/12/20/version-range/</id>
+    <published>2021-12-20T03:26:44.000Z</published>
+    <updated>2021-12-20T05:06:19.528Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="版本号的正确打开方式"><a href="#版本号的正确打开方式" class="headerlink" title="版本号的正确打开方式"></a>版本号的正确打开方式</h1><p>版本号广泛运用于开发的各种场景：NPM 包的版本定义、对 NPM 包的特定版本的依赖指定、git 的 daily 版本号分支……</p><p>面对如此多的场景，版本号的命名却存在很大问题。举些例子：</p><ul><li><p>开始写一个新项目 / 模块时，不管三七二十一，都从 <code>0.0.1</code> 起版本，直到项目不再维护时，版本还停留在 <code>0.0.48</code>，前两位永远都是 0。</p></li><li><p>API 变化巨大，而版本号雷打不动一步一个脚印。一个二方包从 <code>0.0.8</code> 升级到 <code>0.0.9</code>就引起了整个项目的崩溃。</p></li><li><p>依赖二方 / 三方包时，不知道该依赖哪个版本，有时随便指定了一个，有时则直接依赖了 <code>*</code>。</p></li></ul><h2 id="版本号的命名"><a href="#版本号的命名" class="headerlink" title="版本号的命名"></a>版本号的命名</h2><h3 id="SemVer"><a href="#SemVer" class="headerlink" title="SemVer"></a>SemVer</h3><p>根据国际主流的惯例，我们使用「语义化版本（Semantic Versioning）」的命名方式，有时简称 SemVer。</p><p>语义化版本号（以下简称「版本号」）的格式是：<code>&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;</code>。即使用三位非负整数，以点号 <code>.</code> 连接。</p><p>如：<code>1.4.15</code>、<code>6.2.0</code>。</p><h3 id="每一位版本号的含义"><a href="#每一位版本号的含义" class="headerlink" title="每一位版本号的含义"></a>每一位版本号的含义</h3><ol><li><code>&lt;major&gt;</code> 即主版本号，俗称大版本升级。改动到主版本号时，标志着 API 发生了巨大变化，包括但不限于新增特性、修改机制、删除功能， <strong>一般不兼容上一个主版本号</strong>。</li><li><code>&lt;minor&gt;</code> 即次版本号，俗称小版本升级。当我们进行常规的新增或修改功能时，改动次版本号，但是 <strong>必须是向前兼容的</strong>。这也意味着我们 <strong>不能直接删除某个功能</strong>。如若必要，我们可以在 changelog 中标记某项功能为「即将删除（Deprecated）」，然后在下一个大版本中将其彻底删除。</li><li><code>&lt;patch&gt;</code> 即修订号，俗称 bug 修复。顾名思义，如果仅仅为了修复或调整一些小问题，我们就只改动修订号。</li></ol><p>所以，当我们明确了每一位的含义和作用后，就不会陷入「每次只改最末位」的尴尬中了。</p><p>那如何判断一个修改应该是改动修订号还是次版本号呢？视情况而定。比如对于「修改了 app 图标」这件事来说，如果只是调整了图标的间距位置，那么可以认作问题修复；如果把整个图标换了，配上了不同的标语，那么这应该是一次功能改动。</p><h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ul><li>版本号前不要加 <code>v</code>。</li><li>不要在数字前补 <code>0</code>。错误示例：<code>01.12.03</code>。</li><li>每一位版本号按照 +1 的速度递增，不要在版本号之间跳跃。</li><li>主版本号停留在 <code>0</code> 的版本号，即 <code>0.x.x</code> 应当视作还在内部开发阶段的代码。如果代码有公共 API，此时不宜对外公开。</li><li><code>1.0.0</code> 的版本号用于界定公共 API 的形成。</li><li>当次版本号递增时，修订号归零；当主版本号递增时，次版本号、修订号归零。</li><li>进行新的开发时，版本号从 <code>0.1.0</code> 开始。</li><li>如果不小心把一个不兼容的改版当成了次版本号发行，应当发行一个新的次版本号来更正这个问题并且恢复向下兼容。注意 <strong>不能去修改已发行的版本</strong>。</li></ul><h3 id="一个典型的版本号发展示例"><a href="#一个典型的版本号发展示例" class="headerlink" title="一个典型的版本号发展示例"></a>一个典型的版本号发展示例</h3><ol><li><code>0.1.0</code></li><li><code>0.1.1</code></li><li><code>0.1.2</code></li><li><code>0.2.0</code></li><li><code>1.0.0</code></li><li><code>1.1.0</code></li><li><code>1.1.1</code></li><li>……</li></ol><h3 id="快速修改版本号"><a href="#快速修改版本号" class="headerlink" title="快速修改版本号"></a>快速修改版本号</h3><p>如果一个包发布在 NPM / TNPM 中，可以快速修改其版本号。会自动触发一个 git 提交。</p><table><thead><tr><th></th><th><code># 递增一个修订号npm version patch# 递增一个次版本号npm version minor# 递增一个主版本号npm version major</code></th></tr></thead><tbody><tr><td></td><td></td></tr></tbody></table><h2 id="预发版本号"><a href="#预发版本号" class="headerlink" title="预发版本号"></a>预发版本号</h2><p>在常规的版本号命名之上还有一个特殊类别，叫做预发版本号（prerelease version）。它表示当前版本是一个不稳定的版本，使用它时需要注意风险。</p><p>预发版本号的格式是 <code>&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;-&lt;tag&gt;</code>，即前半部分和常规版本号相同，然后跟上连接符 <code>-</code>，后面再跟上字母数字点号连接符（[0-9A-Za-z-.]）。</p><p>一个典型的预发版本号形如 <code>1.0.0-beta.1</code>。建议使用这种 <code>&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;-&lt;stage&gt;.&lt;num&gt;</code> 的形式。其中 <code>&lt;stage&gt;</code> 一般选用：<code>alpha</code>、<code>beta</code>、<code>rc</code>。</p><p>预发版本号是常规版本号的附属，因此在版本的大小比较上，仍然先比较常规版本号部分；对于预发标记部分的比较，则是根据 ASCII 字母表中的顺序来进行。</p><h3 id="一个典型的预发版本号发展示例"><a href="#一个典型的预发版本号发展示例" class="headerlink" title="一个典型的预发版本号发展示例"></a>一个典型的预发版本号发展示例</h3><ol><li><code>0.9.0</code></li><li><code>1.0.0-alpha.1</code></li><li><code>1.0.0-alpha.2</code></li><li><code>1.0.0-beta.1</code></li><li><code>1.0.0-rc.1</code></li><li><code>1.0.0</code></li><li><code>1.0.1</code></li><li>……</li></ol><h2 id="依赖的版本号标记法"><a href="#依赖的版本号标记法" class="headerlink" title="依赖的版本号标记法"></a>依赖的版本号标记法</h2><p>我们广泛使用的 NPM 本身也遵从 SemVer 版本号命名，除了包版本本身的定义之外，最重要的是对三方包依赖的版本号的定义，不当的写法将导致一系列潜在的问题。</p><h3 id="指定可用的版本号范围"><a href="#指定可用的版本号范围" class="headerlink" title="指定可用的版本号范围"></a>指定可用的版本号范围</h3><p>在 NPM 包的 deps 系列字段中，经常出现形如 <code>~1.0.4</code>、<code>^2.1.1</code> 这样的标记法，这种标记法标记的是「版本号范围（version range）」，它表示依赖的三方包其版本号只要落在定义版本号范围内，即算合法。另外，当运行 <code>npm update</code> 时，依赖的包将升级到版本号范围支持的最高版本。</p><p>版本号范围的标记符号有很多种，诸如比较符号 <code>&gt;=</code>、<code>&lt;</code> 等；连接符 <code>-</code>；通配符 <code>x</code>、<code>*</code>；模糊符 <code>^</code>、<code>~</code>。具体的用法可参考 NPM 官方文档，这里仅给出常用的标记方式。</p><table><thead><tr><th>含义</th><th>最简</th><th>通配符</th><th>模糊符</th><th>版本号范围</th></tr></thead><tbody><tr><td>仅跟进修复版本</td><td><code>1.0</code></td><td><code>1.0.x</code></td><td><code>~1.0.4</code></td><td><code>&gt;=1.0.4 &lt;1.1.0</code></td></tr><tr><td>跟进每个小版本更新</td><td><code>1</code></td><td><code>1.x</code>、<code>1.x.x</code></td><td><code>^1.0.4</code></td><td><code>&gt;=1.0.4 &lt;2.0.0</code></td></tr><tr><td>始终升级到最新版</td><td><code>*</code></td><td><code>*</code></td><td><code>*</code></td><td><code>&gt;=0.0.0</code></td></tr></tbody></table><p>我们建议在写法上采用 <strong>「使用通配符的写法」</strong>，并且一般情况下 <strong>「跟进每个小版本更新」</strong>，但 <strong>不「始终升级到最新版」</strong>，即书写为 <code>1.x</code>。由于 <code>&lt;major&gt;</code> 位版本是不向下兼容的，所以在大版本的控制上，仍然采用人为干预以保证安全。</p><h3 id="不同的-deps-字段"><a href="#不同的-deps-字段" class="headerlink" title="不同的 deps 字段"></a>不同的 deps 字段</h3><p>NPM 包中的依赖有几种形式的字段：<code>dependencies</code>、<code>devDependencies</code>、<code>peerDependencies</code>。以下简要介绍下各字段的不同含义，以及使用场景。</p><table><thead><tr><th>字段</th><th>含义</th><th>依赖被安装的时机</th><th>使用场景</th></tr></thead><tbody><tr><td><code>dependencies</code></td><td>运行时依赖，包的调用者需要使用到的依赖</td><td>执行 <code>npm install</code> 后会把当前包的<code>dependencies</code> 字段中的所有依赖项安装到 <code>./node_modules</code> 目录。 执行 <code>npm install xxx</code> 后会把 xxx 安装到 <code>./node_modules</code> 下，同时会安装 xxx 的 <code>dependencies</code> 字段依赖项到<code>./node_modules/xxx/node_modules</code> 目录。  执行 <code>npm install xxx --save</code> 后会额外把 xxx 作为依赖存到当前包的<code>dependencies</code> 字段中。</td><td>所有程序运行需要用到的依赖代码，如 lodash 等。</td></tr><tr><td><code>devDependencies</code></td><td>开发时依赖，包的开发维护者需要使用到的依赖</td><td>执行 <code>npm install</code> 后也会把当前包的<code>devDependencies</code> 字段中的所有依赖项安装到 <code>./node_modules</code> 目录。 执行 <code>npm install xxx</code> 后会把 xxx 安装到 <code>./node_modules</code> 下，但不会安装 xxx 的 <code>devDependencies</code> 字段依赖项。  执行 <code>npm install xxx --save-dev</code> 后会额外把 xxx 作为开发时依赖存到当前包的<code>devDependencies</code> 字段中。</td><td>一般是一些开发调试的辅助工具，如测试工具 mocha、构建工具 gulp 等。</td></tr><tr><td><code>peerDependencies</code></td><td>略</td><td>略</td><td>仅在 特定场景 下有用，默认不使用此字段。</td></tr></tbody></table><p><strong>转载声明</strong>：本文转自「汇智网」<a href="http://mp.weixin.qq.com/s?__biz=MzI3MDAxODk0Ng==&mid=2650015847&idx=1&sn=22cbdc5f33b1b0fa10240fe7bea88bd4&mpshare=1&scene=23&srcid=0725qNBZrEO9h8NP3svRmdGp#rd">论版本号的正确打开方式</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;版本号的正确打开方式&quot;&gt;&lt;a href=&quot;#版本号的正确打开方式&quot; class=&quot;headerlink&quot; title=&quot;版本号的正确打开方式&quot;&gt;&lt;/a&gt;版本号的正确打开方式&lt;/h1&gt;&lt;p&gt;版本号广泛运用于开发的各种场景：NPM 包的版本定义、对 NPM 包的特定版</summary>
+      
+    
+    
+    
+    <category term="NPM" scheme="http://example.com/categories/NPM/"/>
+    
+    <category term="版本号" scheme="http://example.com/categories/NPM/%E7%89%88%E6%9C%AC%E5%8F%B7/"/>
+    
+    
+    <category term="npm" scheme="http://example.com/tags/npm/"/>
+    
+  </entry>
   
   <entry>
     <title>简单的一份2021年终回顾</title>
@@ -533,32 +559,6 @@
     <category term="Vue" scheme="http://example.com/tags/Vue/"/>
     
     <category term="Vue-qr" scheme="http://example.com/tags/Vue-qr/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ElementUI中gutter和offset的区别</title>
-    <link href="http://example.com/2021/05/22/ElementUI-gutter&amp;offset/"/>
-    <id>http://example.com/2021/05/22/ElementUI-gutter&amp;offset/</id>
-    <published>2021-05-22T12:12:02.000Z</published>
-    <updated>2021-05-22T12:23:57.379Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="elementui中gutter和offset的区别"><a href="#elementui中gutter和offset的区别" class="headerlink" title="elementui中gutter和offset的区别"></a>elementui中gutter和offset的区别</h1><blockquote><p> gutter是指栅格间间隔，offset是指栅格左侧的间隔格数</p></blockquote><h2 id="分栏间隔"><a href="#分栏间隔" class="headerlink" title="分栏间隔"></a><strong>分栏间隔</strong></h2><p>el-row配置行，el-col配置列，像是一个个单行的表格</p><p>el-row上的属性gutter，默认值为0，可以设置大于0的任意数字</p><p>在PC端，设置的这个gutter值为该单元格左右的padding之和</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;el-row :gutter=<span class="string">&quot;20&quot;</span>&gt;</span><br><span class="line">  <span class="xml"><span class="tag">&lt;<span class="name">el-col</span> <span class="attr">:span</span>=<span class="string">&quot;6&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;grid-content bg-purple&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">el-col</span>&gt;</span></span></span><br><span class="line">  <span class="xml"><span class="tag">&lt;<span class="name">el-col</span> <span class="attr">:span</span>=<span class="string">&quot;6&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;grid-content bg-purple&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">el-col</span>&gt;</span></span></span><br><span class="line">  <span class="xml"><span class="tag">&lt;<span class="name">el-col</span> <span class="attr">:span</span>=<span class="string">&quot;6&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;grid-content bg-purple&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">el-col</span>&gt;</span></span></span><br><span class="line">  <span class="xml"><span class="tag">&lt;<span class="name">el-col</span> <span class="attr">:span</span>=<span class="string">&quot;6&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;grid-content bg-purple&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">el-col</span>&gt;</span></span></span><br><span class="line">&lt;/el-row&gt;</span><br></pre></td></tr></table></figure><p>上图代表的是<code>&quot;padding-left: 10px; padding-right: 10px;&quot;</code></p><p><img src="/images/ElementUI-gutter&offset/20200810154559866.png" alt="在这里插入图片描述"></p><h2 id="分栏偏移"><a href="#分栏偏移" class="headerlink" title="分栏偏移"></a><strong>分栏偏移</strong></h2><p>el-col的offset属性，设置某个el-col元素左侧<strong>空多少份</strong>的位置，默认为0</p><p>如果其offset和span之和大于<strong>24</strong>，则该行剩余元素移到下一行，同时这个元素只显示一部分</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;el-col :span=<span class="string">&quot;6&quot;</span>&gt;<span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;grid-content bg-purple&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>&lt;/el-col&gt;</span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">el-col</span> <span class="attr">:span</span>=<span class="string">&quot;6&quot;</span> <span class="attr">:offset</span>=<span class="string">&quot;6&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;grid-content bg-purple&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">el-col</span>&gt;</span></span></span><br></pre></td></tr></table></figure><p><img src="/images/ElementUI-gutter&offset/20200810154943500.png" alt="在这里插入图片描述"></p><p>即：中间会偏移原先6份大小的位置~</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;elementui中gutter和offset的区别&quot;&gt;&lt;a href=&quot;#elementui中gutter和offset的区别&quot; class=&quot;headerlink&quot; title=&quot;elementui中gutter和offset的区别&quot;&gt;&lt;/a&gt;elementu</summary>
-      
-    
-    
-    
-    <category term="Css" scheme="http://example.com/categories/Css/"/>
-    
-    
-    <category term="ElementUI" scheme="http://example.com/tags/ElementUI/"/>
-    
-    <category term="Vue" scheme="http://example.com/tags/Vue/"/>
     
   </entry>
   
