@@ -1,0 +1,265 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>8 offer收割机之前端工程化篇 | Jungle</title><meta name="keywords" content="面试,前端工程化"><meta name="author" content="Jungle"><meta name="copyright" content="Jungle"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、Git1. git 和 svn 的区别 git 和 svn 最大的区别在于 git 是分布式的，而 svn 是集中式的。因此我们不能再离线的情况下使用 svn。如果服务器出现问题，就没有办法使用 svn 来提交代码。 svn 中的分支是整个版本库的复制的一份完整目录，而 git 的分支是指针指向某次提交，因此 git 的分支创建更加开销更小并且分支上的变化不会影响到其他人。svn 的分支变化会">
+<meta property="og:type" content="article">
+<meta property="og:title" content="8 offer收割机之前端工程化篇">
+<meta property="og:url" content="http://example.com/2022/02/26/8%20offer%E6%94%B6%E5%89%B2%E6%9C%BA%E4%B9%8B%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96%E7%AF%87/index.html">
+<meta property="og:site_name" content="Jungle">
+<meta property="og:description" content="一、Git1. git 和 svn 的区别 git 和 svn 最大的区别在于 git 是分布式的，而 svn 是集中式的。因此我们不能再离线的情况下使用 svn。如果服务器出现问题，就没有办法使用 svn 来提交代码。 svn 中的分支是整个版本库的复制的一份完整目录，而 git 的分支是指针指向某次提交，因此 git 的分支创建更加开销更小并且分支上的变化不会影响到其他人。svn 的分支变化会">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/cover/fe-interview-all.jpg">
+<meta property="article:published_time" content="2022-02-26T08:22:44.000Z">
+<meta property="article:modified_time" content="2022-05-11T05:11:17.000Z">
+<meta property="article:author" content="Jungle">
+<meta property="article:tag" content="面试">
+<meta property="article:tag" content="前端工程化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/cover/fe-interview-all.jpg"><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="http://example.com/2022/02/26/8%20offer%E6%94%B6%E5%89%B2%E6%9C%BA%E4%B9%8B%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96%E7%AF%87/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-05-11 13:11:17'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Jungle" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">108</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">61</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">26</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 爱好</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> 留声机</span></a></li><li><a class="site-page" href="/books/"><i class="fa-fw fas fa-book"></i><span> 读书架</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 观影区</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/foot/"><i class="fa-fw fas fa-paw"></i><span> 足迹</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/../images/cover/fe-interview-all.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Jungle</a></span><span id="weather-v2-plugin-simple"></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 爱好</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> 留声机</span></a></li><li><a class="site-page" href="/books/"><i class="fa-fw fas fa-book"></i><span> 读书架</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 观影区</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/foot/"><i class="fa-fw fas fa-paw"></i><span> 足迹</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">8 offer收割机之前端工程化篇<a class="post-edit-link" href="null_posts/8 offer收割机之前端工程化篇.md" title="编辑" target="_blank"><i class="fas fa-pencil-alt"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-02-26T08:22:44.000Z" title="发表于 2022-02-26 16:22:44">2022-02-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-05-11T05:11:17.000Z" title="更新于 2022-05-11 13:11:17">2022-05-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%A2%E8%AF%95/">面试</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%A2%E8%AF%95/offer%E6%94%B6%E5%89%B2%E6%9C%BA/">offer收割机</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="一、Git"><a href="#一、Git" class="headerlink" title="一、Git"></a>一、Git</h2><h3 id="1-git-和-svn-的区别"><a href="#1-git-和-svn-的区别" class="headerlink" title="1. git 和 svn 的区别"></a>1. git 和 svn 的区别</h3><ul>
+<li>git 和 svn 最大的区别在于 git 是分布式的，而 svn 是集中式的。因此我们不能再离线的情况下使用 svn。如果服务器出现问题，就没有办法使用 svn 来提交代码。</li>
+<li>svn 中的分支是整个版本库的复制的一份完整目录，而 git 的分支是指针指向某次提交，因此 git 的分支创建更加开销更小并且分支上的变化不会影响到其他人。svn 的分支变化会影响到所有的人。</li>
+<li>svn 的指令相对于 git 来说要简单一些，比 git 更容易上手。</li>
+<li><strong>GIT把内容按元数据方式存储，而SVN是按文件：</strong>因为git目录是处于个人机器上的一个克隆版的版本库，它拥有中心版本库上所有的东西，例如标签，分支，版本记录等。</li>
+<li><strong>GIT分支和SVN的分支不同：</strong>svn会发生分支遗漏的情况，而git可以同一个工作目录下快速的在几个分支间切换，很容易发现未被合并的分支，简单而快捷的合并这些文件。</li>
+<li><strong>GIT没有一个全局的版本号，而SVN有</strong></li>
+<li><strong>GIT的内容完整性要优于SVN：</strong>GIT的内容存储使用的是SHA-1哈希算法。这能确保代码内容的完整性，确保在遇到磁盘故障和网络问题时降低对版本库的破坏</li>
+</ul>
+<h3 id="2-经常使用的-git-命令？"><a href="#2-经常使用的-git-命令？" class="headerlink" title="2. 经常使用的 git 命令？"></a>2. 经常使用的 git 命令？</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git init                     // 新建 git 代码库</span><br><span class="line">git add                      // 添加指定文件到暂存区</span><br><span class="line">git rm                       // 删除工作区文件，并且将这次删除放入暂存区</span><br><span class="line">git commit -m [message]      // 提交暂存区到仓库区</span><br><span class="line">git branch                   // 列出所有分支</span><br><span class="line">git checkout -b [branch]     // 新建一个分支，并切换到该分支</span><br><span class="line">git status                   // 显示有变更文件的状态</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-git-pull-和-git-fetch-的区别"><a href="#3-git-pull-和-git-fetch-的区别" class="headerlink" title="3. git pull 和 git fetch 的区别"></a>3. git pull 和 git fetch 的区别</h3><ul>
+<li>git fetch 只是将远程仓库的变化下载下来，并没有和本地分支合并。</li>
+<li>git pull 会将远程仓库的变化下载下来，并和当前分支合并。</li>
+</ul>
+<h3 id="4-git-rebase-和-git-merge-的区别"><a href="#4-git-rebase-和-git-merge-的区别" class="headerlink" title="4. git rebase 和 git merge 的区别"></a>4. git rebase 和 git merge 的区别</h3><p>git merge 和 git rebase 都是用于分支合并，关键<strong>在</strong> <strong>commit 记录的处理上不同</strong>：</p>
+<ul>
+<li>git merge 会新建一个新的 commit 对象，然后两个分支以前的 commit 记录都指向这个新 commit 记录。这种方法会保留之前每个分支的 commit 历史。</li>
+<li>git rebase 会先找到两个分支的第一个共同的 commit 祖先记录，然后将提取当前分支这之后的所有 commit 记录，然后将这个 commit 记录添加到目标分支的最新提交后面。经过这个合并后，两个分支合并后的 commit 记录就变为了线性的记录了。</li>
+</ul>
+<h2 id="二、Webpack"><a href="#二、Webpack" class="headerlink" title="二、Webpack"></a>二、Webpack</h2><h3 id="1-webpack与grunt、gulp的不同？"><a href="#1-webpack与grunt、gulp的不同？" class="headerlink" title="1. webpack与grunt、gulp的不同？"></a>1. <strong>webpack</strong>与<strong>grunt</strong>、<strong>gulp</strong>的不同？</h3><p><strong>Grunt****、Gulp是基于任务运⾏的⼯具</strong>： 它们会⾃动执⾏指定的任务，就像流⽔线，把资源放上去然后通过不同插件进⾏加⼯，它们包含活跃的社区，丰富的插件，能⽅便的打造各种⼯作流。 </p>
+<p><strong>Webpack是基于模块化打包的⼯具:</strong> ⾃动化处理模块，webpack把⼀切当成模块，当 webpack 处理应⽤程序时，它会递归地构建⼀个依赖关系图 (dependency graph)，其中包含应⽤程序需要的每个模块，然后将所有这些模块打包成⼀个或多个 bundle。 </p>
+<p>因此这是完全不同的两类⼯具,⽽现在主流的⽅式是⽤npm script代替Grunt、Gulp，npm script同样可以打造任务流。</p>
+<h3 id="2-webpack、rollup、parcel优劣？"><a href="#2-webpack、rollup、parcel优劣？" class="headerlink" title="2. webpack、rollup、parcel优劣？"></a>2. <strong>webpack</strong>、<strong>rollup</strong>、<strong>parcel</strong>优劣？</h3><ul>
+<li>webpack适⽤于⼤型复杂的前端站点构建: webpack有强⼤的loader和插件⽣态,打包后的⽂件实际上就是⼀个⽴即执⾏函数，这个⽴即执⾏函数接收⼀个参数，这个参数是模块对象，键为各个模块的路径，值为模块内容。⽴即执⾏函数内部则处理模块之间的引⽤，执⾏模块等,这种情况更适合⽂件依赖复杂的应⽤开发。 </li>
+<li>rollup适⽤于基础库的打包，如vue、d3等: Rollup 就是将各个模块打包进⼀个⽂件中，并且通过 Tree-shaking 来删除⽆⽤的代码,可以最⼤程度上降低代码体积,但是rollup没有webpack如此多的的如代码分割、按需加载等⾼级功能，其更聚焦于库的打包，因此更适合库的开发。</li>
+<li>parcel适⽤于简单的实验性项⽬: 他可以满⾜低⻔槛的快速看到效果,但是⽣态差、报错信息不够全⾯都是他的硬伤，除了⼀些玩具项⽬或者实验项⽬不建议使⽤。</li>
+</ul>
+<h3 id="3-有哪些常⻅的Loader？"><a href="#3-有哪些常⻅的Loader？" class="headerlink" title="3. 有哪些常⻅的Loader？"></a>3. 有哪些常⻅的<strong>Loader</strong>？</h3><ul>
+<li>file-loader：把⽂件输出到⼀个⽂件夹中，在代码中通过相对 URL 去引⽤输出的⽂件 </li>
+<li>url-loader：和 file-loader 类似，但是能在⽂件很⼩的情况下以 base64 的⽅式把⽂件内容注⼊到代码中去 </li>
+<li>source-map-loader：加载额外的 Source Map ⽂件，以⽅便断点调试 </li>
+<li>image-loader：加载并且压缩图⽚⽂件 </li>
+<li>babel-loader：把 ES6 转换成 ES5 </li>
+<li>css-loader：加载 CSS，⽀持模块化、压缩、⽂件导⼊等特性 </li>
+<li>style-loader：把 CSS 代码注⼊到 JavaScript 中，通过 DOM 操作去加载 CSS。 </li>
+<li>eslint-loader：通过 ESLint 检查 JavaScript 代码 </li>
+</ul>
+<p><strong>注意：</strong>在Webpack中，loader的执行顺序是<strong>从右向左</strong>执行的。因为webpack选择了<strong>compose这样的函数式编程方式</strong>，这种方式的表达式执行是从右向左的。</p>
+<h3 id="4-有哪些常⻅的Plugin？"><a href="#4-有哪些常⻅的Plugin？" class="headerlink" title="4. 有哪些常⻅的Plugin？"></a>4. 有哪些常⻅的<strong>Plugin</strong>？</h3><ul>
+<li>define-plugin：定义环境变量 </li>
+<li>html-webpack-plugin：简化html⽂件创建 </li>
+<li>uglifyjs-webpack-plugin：通过 UglifyES 压缩 ES6 代码 </li>
+<li>webpack-parallel-uglify-plugin: 多核压缩，提⾼压缩速度 </li>
+<li>webpack-bundle-analyzer: 可视化webpack输出⽂件的体积 </li>
+<li>mini-css-extract-plugin: CSS提取到单独的⽂件中，⽀持按需加载 </li>
+</ul>
+<h3 id="5-bundle，chunk，module是什么？"><a href="#5-bundle，chunk，module是什么？" class="headerlink" title="5. bundle，chunk，module是什么？"></a>5. <strong>bundle</strong>，<strong>chunk</strong>，<strong>module</strong>是什么？</h3><ul>
+<li>bundle：是由webpack打包出来的⽂件； </li>
+<li>chunk：代码块，⼀个chunk由多个模块组合⽽成，⽤于代码的合并和分割；</li>
+<li>module：是开发中的单个模块，在webpack的世界，⼀切皆模块，⼀个模块对应⼀个⽂件，webpack会从配置的 entry中递归开始找出所有依赖的模块。</li>
+</ul>
+<h3 id="6-Loader和Plugin的不同？"><a href="#6-Loader和Plugin的不同？" class="headerlink" title="6. Loader和Plugin的不同？"></a>6. <strong>Loader</strong>和<strong>Plugin</strong>的不同？</h3><p>不同的作⽤: </p>
+<ul>
+<li><strong>Loader</strong>直译为”加载器”。Webpack将⼀切⽂件视为模块，但是webpack原⽣是只能解析js⽂件，如果想将其他⽂件也打包的话，就会⽤到 loader 。 所以Loader的作⽤是让webpack拥有了加载和解析⾮JavaScript⽂件的能⼒。 </li>
+<li><strong>Plugin</strong>直译为”插件”。Plugin可以扩展webpack的功能，让webpack具有更多的灵活性。 在 Webpack 运⾏的⽣命周期中会⼴播出许多事件，Plugin 可以监听这些事件，在合适的时机通过 Webpack 提供的 API 改变输出结果。</li>
+</ul>
+<p><strong>不同的⽤法</strong><strong>:</strong> </p>
+<ul>
+<li><strong>Loader</strong>在 module.rules 中配置，也就是说他作为模块的解析规则⽽存在。 类型为数组，每⼀项都是⼀个 Object ，⾥⾯描述了对于什么类型的⽂件（ test ），使⽤什么加载( loader )和使⽤的参数（ options ） </li>
+<li><strong>Plugin</strong>在 plugins 中单独配置。 类型为数组，每⼀项是⼀个 plugin 的实例，参数都通过构造函数传⼊。</li>
+</ul>
+<h3 id="7-webpack的构建流程"><a href="#7-webpack的构建流程" class="headerlink" title="7. webpack的构建流程**?**"></a>7. <strong>webpack</strong>的构建流程**?**</h3><p>Webpack 的运⾏流程是⼀个串⾏的过程，从启动到结束会依次执⾏以下流程： </p>
+<ol>
+<li>初始化参数：从配置⽂件和 Shell 语句中读取与合并参数，得出最终的参数； </li>
+<li>开始编译：⽤上⼀步得到的参数初始化 Compiler 对象，加载所有配置的插件，执⾏对象的 run ⽅法开始执⾏编译； </li>
+<li>确定⼊⼝：根据配置中的 entry 找出所有的⼊⼝⽂件； </li>
+<li>编译模块：从⼊⼝⽂件出发，调⽤所有配置的 Loader 对模块进⾏翻译，再找出该模块依赖的模块，再递归本步骤直到所有⼊⼝依赖的⽂件都经过了本步骤的处理； </li>
+<li>完成模块编译：在经过第4步使⽤ Loader 翻译完所有模块后，得到了每个模块被翻译后的最终内容以及它们之间的依赖关系； </li>
+<li>输出资源：根据⼊⼝和模块之间的依赖关系，组装成⼀个个包含多个模块的 Chunk，再把每个 Chunk 转换成⼀个单独的⽂件加⼊到输出列表，这步是可以修改输出内容的最后机会； </li>
+<li>输出完成：在确定好输出内容后，根据配置确定输出的路径和⽂件名，把⽂件内容写⼊到⽂件系统。</li>
+</ol>
+<p>在以上过程中，Webpack 会在特定的时间点⼴播出特定的事件，插件在监听到感兴趣的事件后会执⾏特定的逻辑，并且插件可以调⽤ Webpack 提供的 API 改变 Webpack 的运⾏结果。 </p>
+<h3 id="8-编写loader或plugin的思路？"><a href="#8-编写loader或plugin的思路？" class="headerlink" title="8. 编写loader或plugin的思路？"></a>8. 编写<strong>loader</strong>或<strong>plugin</strong>的思路？</h3><p>Loader像⼀个”翻译官”把读到的源⽂件内容转义成新的⽂件内容，并且每个Loader通过链式操作，将源⽂件⼀步步翻译成想要的样⼦。 </p>
+<p>编写Loader时要遵循单⼀原则，每个Loader只做⼀种”转义”⼯作。 每个Loader的拿到的是源⽂件内容（source），可以通过返回值的⽅式将处理后的内容输出，也可以调⽤ this.callback() ⽅法，将内容返回给webpack。 还可以通过this.async() ⽣成⼀个 callback 函数，再⽤这个callback将处理后的内容输出出去。 此外 webpack 还为开发者准备了开发loader的⼯具函数集——loader-utils 。 </p>
+<p>相对于Loader⽽⾔，Plugin的编写就灵活了许多。 webpack在运⾏的⽣命周期中会⼴播出许多事件，Plugin 可以监听这些事件，在合适的时机通过 Webpack 提供的 API 改变输出结果。</p>
+<h3 id="9-webpack的热更新是如何做到的？说明其原理？"><a href="#9-webpack的热更新是如何做到的？说明其原理？" class="headerlink" title="9. webpack的热更新是如何做到的？说明其原理？"></a>9. <strong>webpack</strong>的热更新是如何做到的？说明其原理？</h3><p>webpack的热更新⼜称热替换（Hot Module Replacement），缩写为HMR。 这个机制可以做到不⽤刷新浏览器⽽将新变更的模块替换掉旧的模块。 </p>
+<p>原理： </p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1500604/1615910527011-339c57ce-22b2-4660-bcb5-93a7c6ec113b.png?x-oss-process=image/resize,w_1500" alt="image.png"></p>
+<p>⾸先要知道server端和client端都做了处理⼯作：</p>
+<ol>
+<li>第⼀步，在 webpack 的 watch 模式下，⽂件系统中某⼀个⽂件发⽣修改，webpack 监听到⽂件变化，根据配置⽂ </li>
+</ol>
+<p>件对模块重新编译打包，并将打包后的代码通过简单的 JavaScript 对象保存在内存中。 </p>
+<ol>
+<li>第⼆步是 webpack-dev-server 和 webpack 之间的接⼝交互，⽽在这⼀步，主要是 dev-server 的中间件 webpack- dev-middleware 和 webpack 之间的交互，webpack-dev-middleware 调⽤ webpack 暴露的 API对代码变化进⾏监 控，并且告诉 webpack，将代码打包到内存中。 </li>
+<li>第三步是 webpack-dev-server 对⽂件变化的⼀个监控，这⼀步不同于第⼀步，并不是监控代码变化重新打包。当我们在配置⽂件中配置了devServer.watchContentBase 为 true 的时候，Server 会监听这些配置⽂件夹中静态⽂件的变化，变化后会通知浏览器端对应⽤进⾏ live reload。注意，这⼉是浏览器刷新，和 HMR 是两个概念。 </li>
+<li>第四步也是 webpack-dev-server 代码的⼯作，该步骤主要是通过 sockjs（webpack-dev-server 的依赖）在浏览器端和服务端之间建⽴⼀个 websocket ⻓连接，将 webpack 编译打包的各个阶段的状态信息告知浏览器端，同时也包括第三步中 Server 监听静态⽂件变化的信息。浏览器端根据这些 socket 消息进⾏不同的操作。当然服务端传递的最主要信息还是新模块的 hash 值，后⾯的步骤根据这⼀ hash 值来进⾏模块热替换。 </li>
+<li>webpack-dev-server/client 端并不能够请求更新的代码，也不会执⾏热更模块操作，⽽把这些⼯作⼜交回给了webpack，webpack/hot/dev-server 的⼯作就是根据 webpack-dev-server/client 传给它的信息以及 dev-server 的配置决定是刷新浏览器呢还是进⾏模块热更新。当然如果仅仅是刷新浏览器，也就没有后⾯那些步骤了。 </li>
+<li>HotModuleReplacement.runtime 是客户端 HMR 的中枢，它接收到上⼀步传递给他的新模块的 hash 值，它通过JsonpMainTemplate.runtime 向 server 端发送 Ajax 请求，服务端返回⼀个 json，该 json 包含了所有要更新的模块的 hash 值，获取到更新列表后，该模块再次通过 jsonp 请求，获取到最新的模块代码。这就是上图中 7、8、9 步骤。 </li>
+<li>⽽第 10 步是决定 HMR 成功与否的关键步骤，在该步骤中，HotModulePlugin 将会对新旧模块进⾏对⽐，决定是否更新模块，在决定更新模块后，检查模块之间的依赖关系，更新模块的同时更新模块间的依赖引⽤。 </li>
+<li>最后⼀步，当 HMR 失败后，回退到 live reload 操作，也就是进⾏浏览器刷新来获取最新打包代码。</li>
+</ol>
+<h3 id="10-如何⽤webpack来优化前端性能？"><a href="#10-如何⽤webpack来优化前端性能？" class="headerlink" title="10. 如何⽤webpack来优化前端性能？"></a>10. 如何⽤<strong>webpack</strong>来优化前端性能？</h3><p>⽤webpack优化前端性能是指优化webpack的输出结果，让打包的最终结果在浏览器运⾏快速⾼效。 </p>
+<ul>
+<li><strong>压缩代码</strong>：删除多余的代码、注释、简化代码的写法等等⽅式。可以利⽤webpack的 UglifyJsPlugin 和 ParallelUglifyPlugin 来压缩JS⽂件， 利⽤ cssnano （css-loader?minimize）来压缩css </li>
+<li><strong>利⽤<strong><strong>CDN</strong></strong>加速</strong>: 在构建过程中，将引⽤的静态资源路径修改为CDN上对应的路径。可以利⽤webpack对于 output 参数和各loader的 publicPath 参数来修改资源路径 </li>
+<li><strong>Tree Shaking</strong>: 将代码中永远不会⾛到的⽚段删除掉。可以通过在启动webpack时追加参数 –optimize-minimize 来实现</li>
+<li><strong>Code Splitting:</strong> 将代码按路由维度或者组件分块(chunk),这样做到按需加载,同时可以充分利⽤浏览器缓存 </li>
+<li><strong>提取公共第三⽅库</strong>: SplitChunksPlugin插件来进⾏公共模块抽取,利⽤浏览器缓存可以⻓期缓存这些⽆需频繁变动的公共代码 </li>
+</ul>
+<h3 id="11-如何提⾼webpack的打包速度"><a href="#11-如何提⾼webpack的打包速度" class="headerlink" title="11. 如何提⾼webpack的打包速度**?**"></a>11. 如何提⾼<strong>webpack</strong>的打包速度**?**</h3><ul>
+<li>happypack: 利⽤进程并⾏编译loader,利⽤缓存来使得 rebuild 更快,遗憾的是作者表示已经不会继续开发此项⽬,类似的替代者是thread-loader </li>
+<li>外部扩展(externals): 将不怎么需要更新的第三⽅库脱离webpack打包，不被打⼊bundle中，从⽽减少打包时间，⽐如jQuery⽤script标签引⼊ </li>
+<li>dll: 采⽤webpack的 DllPlugin 和 DllReferencePlugin 引⼊dll，让⼀些基本不会改动的代码先打包成静态资源，避免反复编译浪费时间 </li>
+<li>利⽤缓存: webpack.cache 、babel-loader.cacheDirectory、 HappyPack.cache 都可以利⽤缓存提⾼rebuild效率缩⼩⽂件搜索范围: ⽐如babel-loader插件,如果你的⽂件仅存在于src中,那么可以 include: path.resolve(__dirname,’src’) ,当然绝⼤多数情况下这种操作的提升有限，除⾮不⼩⼼build了node_modules⽂件 </li>
+</ul>
+<h3 id="12-如何提⾼webpack的构建速度？"><a href="#12-如何提⾼webpack的构建速度？" class="headerlink" title="12. 如何提⾼webpack的构建速度？"></a>12. 如何提⾼<strong>webpack</strong>的构建速度？</h3><ol>
+<li>多⼊⼝情况下，使⽤ CommonsChunkPlugin 来提取公共代码 </li>
+<li>通过 externals 配置来提取常⽤库 </li>
+<li>利⽤ DllPlugin 和 DllReferencePlugin 预编译资源模块 通过 DllPlugin 来对那些我们引⽤但是绝对不会修改的npm包来进⾏预编译，再通过 DllReferencePlugin 将预编译的模块加载进来。 </li>
+<li>使⽤ Happypack 实现多线程加速编译 </li>
+<li>使⽤ webpack-uglify-parallel 来提升 uglifyPlugin 的压缩速度。 原理上 webpack-uglify-parallel 采⽤了多核并⾏压缩来提升压缩速度 </li>
+<li>使⽤ Tree-shaking 和 Scope Hoisting 来剔除多余代码 </li>
+</ol>
+<h3 id="13-怎么配置单⻚应⽤？怎么配置多⻚应⽤？"><a href="#13-怎么配置单⻚应⽤？怎么配置多⻚应⽤？" class="headerlink" title="13. 怎么配置单⻚应⽤？怎么配置多⻚应⽤？"></a>13. 怎么配置单⻚应⽤？怎么配置多⻚应⽤？</h3><p>单⻚应⽤可以理解为webpack的标准模式，直接在 entry 中指定单⻚应⽤的⼊⼝即可，这⾥不再赘述多⻚应⽤的话，可以使⽤webpack的 AutoWebPlugin 来完成简单⾃动化的构建，但是前提是项⽬的⽬录结构必须遵守他预设的规范。 多⻚应⽤中要注意的是： </p>
+<ul>
+<li>每个⻚⾯都有公共的代码，可以将这些代码抽离出来，避免重复的加载。⽐如，每个⻚⾯都引⽤了同⼀套css样式表</li>
+<li>随着业务的不断扩展，⻚⾯可能会不断的追加，所以⼀定要让⼊⼝的配置⾜够灵活，避免每次添加新⻚⾯还需要修改构建配置 </li>
+</ul>
+<h2 id="三、其他"><a href="#三、其他" class="headerlink" title="三、其他"></a>三、其他</h2><h3 id="1-Babel的原理是什么"><a href="#1-Babel的原理是什么" class="headerlink" title="1. Babel的原理是什么**?**"></a><strong>1. Babel</strong>的原理是什么**?**</h3><p>babel 的转译过程也分为三个阶段，这三步具体是： </p>
+<ul>
+<li><strong>解析 Parse</strong>: 将代码解析⽣成抽象语法树（AST），即词法分析与语法分析的过程；</li>
+<li><strong>转换 Transform</strong>: 对于 AST 进⾏变换⼀系列的操作，babel 接受得到 AST 并通过 babel-traverse 对其进⾏遍历，在此过程中进⾏添加、更新及移除等操作；</li>
+<li><strong>⽣成 Generate</strong>: 将变换后的 AST 再转换为 JS 代码, 使⽤到的模块是 babel-generator。</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1500604/1615908675152-69682ae3-d0b3-4552-a32e-39c2022b1db0.png?x-oss-process=image/resize,w_1500" alt="image.png"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Jungle</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2022/02/26/8%20offer%E6%94%B6%E5%89%B2%E6%9C%BA%E4%B9%8B%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96%E7%AF%87/">http://example.com/2022/02/26/8 offer收割机之前端工程化篇/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Jungle</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%9D%A2%E8%AF%95/">面试</a><a class="post-meta__tags" href="/tags/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/">前端工程化</a></div><div class="post_share"><div class="social-share" data-image="/../images/cover/fe-interview-all.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechatpay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechatpay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/03/06/9%20offer%E6%94%B6%E5%89%B2%E6%9C%BA%E4%B9%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%AF%87/"><img class="prev-cover" src="/../images/cover/fe-interview-all.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">9 offer收割机之计算机网络篇</div></div></a></div><div class="next-post pull-right"><a href="/2022/02/09/7%20offer%E6%94%B6%E5%89%B2%E6%9C%BA%E4%B9%8BReact%E7%AF%87/"><img class="next-cover" src="/../images/cover/fe-interview-all.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">7 offer收割机之React篇</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/07/15/interview-exp01/" title="前端面试exp01"><img class="cover" src="/../images/cover/FE-Interview.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-15</div><div class="title">前端面试exp01</div></div></a></div><div><a href="/2021/09/23/interview-exp02/" title="前端面试exp02"><img class="cover" src="/../images/cover/FE-Interview.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-09-23</div><div class="title">前端面试exp02</div></div></a></div><div><a href="/2021/11/14/1 前端面试准备/" title="1 前端面试准备"><img class="cover" src="/../images/cover/fe-interview-all.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-14</div><div class="title">1 前端面试准备</div></div></a></div><div><a href="/2022/05/05/15 vue项目的性能优化/" title="15 offer收割机之Vue项目性能优化篇"><img class="cover" src="/../images/cover/fe-interview-all.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-05</div><div class="title">15 offer收割机之Vue项目性能优化篇</div></div></a></div><div><a href="/2021/12/20/3 offer收割机之HTML篇/" title="3 offer收割机之HTML篇"><img class="cover" src="/../images/cover/fe-interview-all.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-20</div><div class="title">3 offer收割机之HTML篇</div></div></a></div><div><a href="/2022/01/30/6 offer收割机之性能优化篇/" title="6 offer收割机之性能优化篇"><img class="cover" src="/../images/cover/fe-interview-all.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-01-30</div><div class="title">6 offer收割机之性能优化篇</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Jungle</div><div class="author-info__description">喜欢交友，爱好编程，欢迎大家与我一起交流，共同进步！</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">108</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">61</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">26</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/qsbit"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/qsbit" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:jungleemail@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=965499224&amp;site=qq&amp;menu=yes" target="_blank" title=""><i class="fab fa-qq"></i></a><a class="social-icon" href="https://qsbit.gitee.io/atom.xml" target="_blank" title=""><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">You make me want to be a better man！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Git"><span class="toc-number">1.</span> <span class="toc-text">一、Git</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-git-%E5%92%8C-svn-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.1.</span> <span class="toc-text">1. git 和 svn 的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%BB%8F%E5%B8%B8%E4%BD%BF%E7%94%A8%E7%9A%84-git-%E5%91%BD%E4%BB%A4%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">2. 经常使用的 git 命令？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-git-pull-%E5%92%8C-git-fetch-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.3.</span> <span class="toc-text">3. git pull 和 git fetch 的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-git-rebase-%E5%92%8C-git-merge-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.4.</span> <span class="toc-text">4. git rebase 和 git merge 的区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Webpack"><span class="toc-number">2.</span> <span class="toc-text">二、Webpack</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-webpack%E4%B8%8Egrunt%E3%80%81gulp%E7%9A%84%E4%B8%8D%E5%90%8C%EF%BC%9F"><span class="toc-number">2.1.</span> <span class="toc-text">1. webpack与grunt、gulp的不同？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-webpack%E3%80%81rollup%E3%80%81parcel%E4%BC%98%E5%8A%A3%EF%BC%9F"><span class="toc-number">2.2.</span> <span class="toc-text">2. webpack、rollup、parcel优劣？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%9C%89%E5%93%AA%E4%BA%9B%E5%B8%B8%E2%BB%85%E7%9A%84Loader%EF%BC%9F"><span class="toc-number">2.3.</span> <span class="toc-text">3. 有哪些常⻅的Loader？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%9C%89%E5%93%AA%E4%BA%9B%E5%B8%B8%E2%BB%85%E7%9A%84Plugin%EF%BC%9F"><span class="toc-number">2.4.</span> <span class="toc-text">4. 有哪些常⻅的Plugin？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-bundle%EF%BC%8Cchunk%EF%BC%8Cmodule%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">2.5.</span> <span class="toc-text">5. bundle，chunk，module是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-Loader%E5%92%8CPlugin%E7%9A%84%E4%B8%8D%E5%90%8C%EF%BC%9F"><span class="toc-number">2.6.</span> <span class="toc-text">6. Loader和Plugin的不同？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-webpack%E7%9A%84%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B"><span class="toc-number">2.7.</span> <span class="toc-text">7. webpack的构建流程**?**</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E7%BC%96%E5%86%99loader%E6%88%96plugin%E7%9A%84%E6%80%9D%E8%B7%AF%EF%BC%9F"><span class="toc-number">2.8.</span> <span class="toc-text">8. 编写loader或plugin的思路？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-webpack%E7%9A%84%E7%83%AD%E6%9B%B4%E6%96%B0%E6%98%AF%E5%A6%82%E4%BD%95%E5%81%9A%E5%88%B0%E7%9A%84%EF%BC%9F%E8%AF%B4%E6%98%8E%E5%85%B6%E5%8E%9F%E7%90%86%EF%BC%9F"><span class="toc-number">2.9.</span> <span class="toc-text">9. webpack的热更新是如何做到的？说明其原理？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-%E5%A6%82%E4%BD%95%E2%BD%A4webpack%E6%9D%A5%E4%BC%98%E5%8C%96%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%EF%BC%9F"><span class="toc-number">2.10.</span> <span class="toc-text">10. 如何⽤webpack来优化前端性能？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E5%A6%82%E4%BD%95%E6%8F%90%E2%BE%BCwebpack%E7%9A%84%E6%89%93%E5%8C%85%E9%80%9F%E5%BA%A6"><span class="toc-number">2.11.</span> <span class="toc-text">11. 如何提⾼webpack的打包速度**?**</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E5%A6%82%E4%BD%95%E6%8F%90%E2%BE%BCwebpack%E7%9A%84%E6%9E%84%E5%BB%BA%E9%80%9F%E5%BA%A6%EF%BC%9F"><span class="toc-number">2.12.</span> <span class="toc-text">12. 如何提⾼webpack的构建速度？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-%E6%80%8E%E4%B9%88%E9%85%8D%E7%BD%AE%E5%8D%95%E2%BB%9A%E5%BA%94%E2%BD%A4%EF%BC%9F%E6%80%8E%E4%B9%88%E9%85%8D%E7%BD%AE%E5%A4%9A%E2%BB%9A%E5%BA%94%E2%BD%A4%EF%BC%9F"><span class="toc-number">2.13.</span> <span class="toc-text">13. 怎么配置单⻚应⽤？怎么配置多⻚应⽤？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%85%B6%E4%BB%96"><span class="toc-number">3.</span> <span class="toc-text">三、其他</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Babel%E7%9A%84%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">3.1.</span> <span class="toc-text">1. Babel的原理是什么**?**</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/05/05/15%20vue%E9%A1%B9%E7%9B%AE%E7%9A%84%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" title="15 offer收割机之Vue项目性能优化篇"><img src="/../images/cover/fe-interview-all.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="15 offer收割机之Vue项目性能优化篇"/></a><div class="content"><a class="title" href="/2022/05/05/15%20vue%E9%A1%B9%E7%9B%AE%E7%9A%84%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" title="15 offer收割机之Vue项目性能优化篇">15 offer收割机之Vue项目性能优化篇</a><time datetime="2022-05-05T05:55:43.000Z" title="发表于 2022-05-05 13:55:43">2022-05-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/28/14%20offer%E6%94%B6%E5%89%B2%E6%9C%BA%E4%B9%8BVue%E7%AF%87/" title="14 offer收割机之Vue篇"><img src="/../images/cover/fe-interview-all.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="14 offer收割机之Vue篇"/></a><div class="content"><a class="title" href="/2022/04/28/14%20offer%E6%94%B6%E5%89%B2%E6%9C%BA%E4%B9%8BVue%E7%AF%87/" title="14 offer收割机之Vue篇">14 offer收割机之Vue篇</a><time datetime="2022-04-28T08:22:44.000Z" title="发表于 2022-04-28 16:22:44">2022-04-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/15/13%20LeetCode%E9%9D%A2%E8%AF%95%E5%B8%B8%E8%80%83%E9%A2%98%E7%9B%AE/" title="13 offer收割机之LeetCode面试常考题"><img src="/../images/cover/fe-interview-all.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="13 offer收割机之LeetCode面试常考题"/></a><div class="content"><a class="title" href="/2022/04/15/13%20LeetCode%E9%9D%A2%E8%AF%95%E5%B8%B8%E8%80%83%E9%A2%98%E7%9B%AE/" title="13 offer收割机之LeetCode面试常考题">13 offer收割机之LeetCode面试常考题</a><time datetime="2022-04-15T08:22:44.000Z" title="发表于 2022-04-15 16:22:44">2022-04-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/11/12%20offer%E6%94%B6%E5%89%B2%E6%9C%BA%E4%B9%8B%E4%BB%A3%E7%A0%81%E8%BE%93%E5%87%BA%E7%AF%87/" title="12 offer收割机之代码输出篇"><img src="/../images/cover/fe-interview-all.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="12 offer收割机之代码输出篇"/></a><div class="content"><a class="title" href="/2022/04/11/12%20offer%E6%94%B6%E5%89%B2%E6%9C%BA%E4%B9%8B%E4%BB%A3%E7%A0%81%E8%BE%93%E5%87%BA%E7%AF%87/" title="12 offer收割机之代码输出篇">12 offer收割机之代码输出篇</a><time datetime="2022-04-11T08:22:44.000Z" title="发表于 2022-04-11 16:22:44">2022-04-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/29/11%20offer%E6%94%B6%E5%89%B2%E6%9C%BA%E4%B9%8B%E6%89%8B%E5%86%99%E4%BB%A3%E7%A0%81%E7%AF%87/" title="11 offer收割机之手写代码篇"><img src="/../images/cover/fe-interview-all.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="11 offer收割机之手写代码篇"/></a><div class="content"><a class="title" href="/2022/03/29/11%20offer%E6%94%B6%E5%89%B2%E6%9C%BA%E4%B9%8B%E6%89%8B%E5%86%99%E4%BB%A3%E7%A0%81%E7%AF%87/" title="11 offer收割机之手写代码篇">11 offer收割机之手写代码篇</a><time datetime="2022-03-29T08:22:44.000Z" title="发表于 2022-03-29 16:22:44">2022-03-29</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Jungle</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a target="_blank" rel="noopener" href="https://qsbit.github.io/">Blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'default',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script></div><script src="https://apip.weatherdt.com/simple/static/js/weather-simple-common.js?v=2.0"></script><script src="/js/weather.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
